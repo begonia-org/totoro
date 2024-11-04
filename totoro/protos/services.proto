@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package totoro;
+import "constant.proto";
+import "doc.proto";
+import "pydantic.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+message EmbeddingRequest{
+ 
+    string file_key=1;
+    string lang=2;
+    ChunkType chunk_type=3[json_name="chunk_type"];
+    ParserConfig parser_config=5[json_name="parser_config"];
+    string embedding=6;
+}

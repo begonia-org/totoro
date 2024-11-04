@@ -1,0 +1,5 @@
+prod:
+  debug: false
+  log:
+    level: INFO
+    format: json

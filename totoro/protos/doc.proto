@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+package totoro;
+import "google/protobuf/any.proto";
+
+import "pydantic.proto";
+import "constant.proto";
+
+// left, right, top, bottom
+message Position{
+ 
+    int32 number=1[json_name="number"];
+    int32 left=2;
+    int32 right=3;
+    int32 top=4;
+    int32 bottom=5;
+}
+message ParserConfig{
+
+    // "chunk_token_num": 128, "delimiter": "\n!?。；！？", "layout_recognize": True
+    optional double filename_embd_weight=1[json_name="filename_embd_weight",(pydantic.field)={description:"filename_embd_weight",default:"0.2"}];
+    optional int64 task_page_size=2[json_name="task_page_size",(pydantic.field)={description:"task_page_size",default:"12"}];
+    optional bool do_layout_recognize=3[json_name="do_layout_recognize",(pydantic.field)={description:"do_layout_recognize",default:"True"}];
+    optional int64 chunk_token_num=4[json_name="chunk_token_num",(pydantic.field)={description:"chunk_token_num",default:"128"}];
+    optional string delimiter=5[json_name="delimiter",(pydantic.field)={description:"delimiter",default:"\\n!?。；！？"}];
+
+}
+message DocTask{
+
+    string file_id=1[json_name="file_id"];
+    string lang=2;
+    string llm_id=6[json_name="llm_id"];
+    string kb_id=7[json_name="kb_id"];
+    ChunkType chunk_type=8[json_name="chunk_type"];
+
+}
+message Doc{
+ 
+    string doc_id=1[json_name="doc_id"];
+    string doc_name_keyword=3[json_name="doc_name_keyword"];
+    string title_tokens=4[json_name="title_tokens"];
+    string title_small_tokens=5[json_name="title_small_tokens"];
+    repeated int32 page_num=6[json_name="page_num"];
+    repeated Position positions=7[json_name="positions"];
+    repeated int32 top=8;
+    string content_with_weight=9[json_name="content_with_weight"];
+    string content_tokens=10[json_name="content_tokens"];
+    string content_small_tokens=11[json_name="content_small_tokens"];
+    // string create_at=12[json_name="create_at"];
+    // int64 create_timestamp=13[json_name="create_timestamp"];
+    string image_uri=14[json_name="image_uri"];
+    repeated double q_vec=15[json_name="q_vec"];
+    int32 q_vec_size=16[json_name="q_vec_size"];
+    string image = 17;
+    // repeated string important_keyword=18[json_name="important_keyword"];
+    // repeated double q_512_vec=19[json_name="q_512_vec"];
+    // repeated double q_1024_vec=20[json_name="q_1024_vec"];
+    // repeated double q_768_vec=21[json_name="q_768_vec"];
+    // repeated double q_1536_vec=22[json_name="q_1536_vec"];
+    string file_key=23[json_name="file_key"];
+}
+message DocItem {
+    string doc_id=1[json_name="doc_id"];
+
+    repeated string kb_ids=2[json_name="kb_ids"];
+    string doc_name_keyword=3[json_name="doc_name_keyword"];
+    string title_tokens=4[json_name="title_tokens"];
+    repeated Position positions=7[json_name="positions"];
+    string content_with_weight=9[json_name="content_with_weight",(pydantic.field)={description:"content_with_weight",default:""}];
+
+    string content_tokens=10[json_name="content_tokens"];
+    string image = 17;
+    int32 q_vec_size = 18[json_name="q_vec_size"];
+    repeated string important_keyword=19[json_name="important_keyword",(pydantic.field)={description:"important_keyword",default:"[]"}];
+
+    repeated double q_vec=20[json_name="q_vec"];
+}
+message DocAggs {
+    string doc_name=1[json_name="doc_name"];
+    string doc_id=2[json_name="doc_id"];
+    int32 count=3[json_name="count"];
+}
+message DocChunk{
+
+    string doc_id=1[json_name="doc_id"];
+    repeated string kb_ids=2[json_name="kb_ids"];
+    repeated string important_keyword=3[json_name="important_keyword"];
+    string doc_name_keyword=4[json_name="doc_name_keyword"];
+    string image=5[json_name="image"];
+    double similarity=6;
+    double vector_similarity=7[json_name="vector_similarity"];
+    double term_similarity=8[json_name="term_similarity"];
+    // repeated double vector=9;
+    string content_with_weight=10[json_name="content_with_weight"];
+    string content_tokens=11[json_name="content_tokens"];
+    repeated Position positions=12;
+    string chunk_id=13[json_name="chunk_id"];
+}
+message DocDegreeProgress{
+
+    string message = 1;
+    double progress = 2;
+}
+
+
+message SearchRequest{
+
+    repeated string kb_ids=1;
+    repeated string doc_ids=2;
+    int32 size=3;
+    string question=4;
+    bool vector=5;
+    int32 topk=6;
+    double similarity=7;
+    bool available=8;
+    int32 page = 9;
+
+}
+
+message DocSearchResult{
+    int64 total=1;
+    repeated string ids=2;
+    repeated float query_vector=3;
+    map<string,DocItem> docs=4;
+    map<string,string> highlight=5;
+    repeated string aggregation=6;
+    repeated string keywords=7;
+    repeated string group_docs=8;
+}
+
+
+message DocSearchVector{
+    int32 q_vec_size = 1[json_name="q_vec_size"];
+    int32 top_k = 2[json_name="top_k"];
+    double similarity=3;
+    int32 num_candidates=4[json_name="num_candidates"];
+    repeated double query_vector=5[json_name="query_vector"];
+
+}

@@ -1,0 +1,9 @@
+default:
+  debug: true
+  log:
+    level: DEBUG
+    format: text
+  models:
+    download:
+      dir: "/data/work/hf"
+
