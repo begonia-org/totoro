@@ -24,7 +24,7 @@ def main():
     test_logger.debug(data_dir)
     file = os.path.join(data_dir, "test_zh.docx")
     ret = embedding.build_embedding(
-        file, "test_doc", ChunkType.CHUNK_TYPE_NAIVE, 1, EmbeddingModel["BAAI"]("", "BAAI/bge-m3"))
+        file, "test_zh", ChunkType.CHUNK_TYPE_NAIVE, 1, EmbeddingModel["BAAI"]("", "BAAI/bge-large-zh-v1.5"))
     docs = []
     index = faiss.IndexFlatIP(1024)
     for doc, tk in ret:
@@ -37,33 +37,34 @@ def main():
         # test_logger.debug(doc, tk)
     with open("embedding_zh.json", "w", encoding="utf-8") as f:
         json.dump(docs, f, ensure_ascii=False, indent=4)
-    file = os.path.join(data_dir, "中国国际航空航天博览会.pdf")
-    ret = embedding.build_embedding(
-        file, "中国国际航空航天博览会", ChunkType.CHUNK_TYPE_NAIVE, 1, EmbeddingModel["BAAI"]("", "BAAI/bge-m3"))
-    docs = []
-    # index = faiss.IndexFlatL2(1024)
-    for doc, tk in ret:
-        # print(doc, tk)
-        docs.append(doc.model_dump_json())
-        faiss_vector = np.array(doc.q_vec, dtype=np.float32)
-        index.add(faiss_vector.reshape(1, -1))
-        # 转换为 np.float32 类型
+    # file = os.path.join(data_dir, "中国国际航空航天博览会.pdf")
+    # ret = embedding.build_embedding(
+    #     file, "中国国际航空航天博览会", ChunkType.CHUNK_TYPE_NAIVE, 1, EmbeddingModel["BAAI"]("", "BAAI/bge-large-zh-v1.5"))
+    # docs = []
+    # # index = faiss.IndexFlatL2(1024)
+    # for doc, tk in ret:
+    #     # print(doc, tk)
+    #     docs.append(doc.model_dump_json())
+    #     faiss_vector = np.array(doc.q_vec, dtype=np.float32)
+    #     index.add(faiss_vector.reshape(1, -1))
+    #     # 转换为 np.float32 类型
 
-        # test_logger.debug(doc, tk)
-    with open("embedding_zh_2.json", "w", encoding="utf-8") as f:
-        json.dump(docs, f, ensure_ascii=False, indent=4)
-    search_vec = embedding.build_query_vector(
-        "科学技术普及法修订草案的目标是什么？", EmbeddingModel["BAAI"]("", "BAAI/bge-m3"))
-    # 将查询向量转换为 np.array，确保数据类型为 float32
-    # 归一化查询向量
-    query_vector = np.array([search_vec.query_vector], dtype=np.float32)
-    query_vector /= np.linalg.norm(query_vector, axis=1, keepdims=True)
-    
-    # 在索引中查找 top_k 个相似向量
-    distances, indices = index.search(query_vector, search_vec.top_k)
-    filtered_results = [(idx, dist) for idx, dist in zip(indices[0], distances[0]) if dist >= 0.8]
+    #     # test_logger.debug(doc, tk)
+    # with open("embedding_zh_2.json", "w", encoding="utf-8") as f:
+    #     json.dump(docs, f, ensure_ascii=False, indent=4)
+    # search_vec = embedding.build_query_vector(
+    #     "科学技术普及法修订草案的目标是什么？", EmbeddingModel["BAAI"]("", "BAAI/bge-large-zh-v1.5"))
+    # # 将查询向量转换为 np.array，确保数据类型为 float32
+    # # 归一化查询向量
+    # query_vector = np.array([search_vec.query_vector], dtype=np.float32)
+    # query_vector /= np.linalg.norm(query_vector, axis=1, keepdims=True)
 
-    print(filtered_results)
+    # # 在索引中查找 top_k 个相似向量
+    # distances, indices = index.search(query_vector, search_vec.top_k)
+    # filtered_results = [(idx, dist) for idx, dist in zip(
+    #     indices[0], distances[0]) if dist >= 0.8]
+
+    # print(filtered_results)
 
 
 if __name__ == "__main__":
