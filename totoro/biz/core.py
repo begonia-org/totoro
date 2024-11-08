@@ -23,7 +23,7 @@ from ..llm.rerank.rerank import BaseRerank
 from ..llm.embbeding.embedding import BaseEmbedding
 
 
-class EmbeddingCore:
+class RAGCore:
     def __init__(self):
         self.title_regx = re.compile(
             r"</?(table|td|caption|tr|th)( [^<>]{0,12})?>")
@@ -199,7 +199,7 @@ class EmbeddingCore:
         }
         return DocSearchVector(**vec)
 
-    def rerank_by_model(self, rerank_mdl: BaseRerank, query: str,
+    def reranking(self, rerank_mdl: BaseRerank, query: str,
                         candidate_tokens: List[str], tkweight=0.3,
                         vtweight=0.7) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """

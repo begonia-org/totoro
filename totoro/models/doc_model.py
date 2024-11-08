@@ -8,23 +8,23 @@
 '''
 
 
-from typing import Type, List, Any, Optional, Dict
+from typing import Type, Dict, Optional, Any, List
 
-from pydantic_protobuf.ext import protobuf2model, PydanticModel, pool, model2protobuf
+from pydantic_protobuf.ext import model2protobuf, PydanticModel, pool, protobuf2model
+
+from typing import Type, Optional
 
 from google.protobuf import message as _message
-
-from pydantic import Field as _Field
-
-from typing import Optional, Type, List
 
 from pydantic import BaseModel
 
 from .constant_model import ChunkType
 
-from typing import Optional, Type
-
 from google.protobuf import message_factory
+
+from typing import Type, Optional, List
+
+from pydantic import Field as _Field
 
 
 class Position(BaseModel):
@@ -101,6 +101,35 @@ class Doc(BaseModel):
 
     def to_protobuf(self) -> _message.Message:
         _proto = pool.FindMessageTypeByName("totoro.Doc")
+        _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
+        return model2protobuf(self, _cls())
+
+    @classmethod
+    def from_protobuf(cls: Type[PydanticModel], src: _message.Message) -> PydanticModel:
+        return protobuf2model(cls, src)
+
+
+class Smilarity(BaseModel):
+
+    simlarity: Optional[List[float]] = _Field()
+
+    def to_protobuf(self) -> _message.Message:
+        _proto = pool.FindMessageTypeByName("totoro.Smilarity")
+        _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
+        return model2protobuf(self, _cls())
+
+    @classmethod
+    def from_protobuf(cls: Type[PydanticModel], src: _message.Message) -> PydanticModel:
+        return protobuf2model(cls, src)
+
+
+class EmbededItem(BaseModel):
+
+    doc: Optional[Doc] = _Field()
+    tokens: Optional[int] = _Field()
+
+    def to_protobuf(self) -> _message.Message:
+        _proto = pool.FindMessageTypeByName("totoro.EmbededItem")
         _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
         return model2protobuf(self, _cls())
 

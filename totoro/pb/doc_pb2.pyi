@@ -84,6 +84,20 @@ class Doc(_message.Message):
     file_key: str
     def __init__(self, doc_id: _Optional[str] = ..., doc_name_keyword: _Optional[str] = ..., title_tokens: _Optional[str] = ..., title_small_tokens: _Optional[str] = ..., page_num: _Optional[_Iterable[int]] = ..., positions: _Optional[_Iterable[_Union[Position, _Mapping]]] = ..., top: _Optional[_Iterable[int]] = ..., content_with_weight: _Optional[str] = ..., content_tokens: _Optional[str] = ..., content_small_tokens: _Optional[str] = ..., image_uri: _Optional[str] = ..., q_vec: _Optional[_Iterable[float]] = ..., q_vec_size: _Optional[int] = ..., image: _Optional[str] = ..., file_key: _Optional[str] = ...) -> None: ...
 
+class Smilarity(_message.Message):
+    __slots__ = ("simlarity",)
+    SIMLARITY_FIELD_NUMBER: _ClassVar[int]
+    simlarity: _containers.RepeatedScalarFieldContainer[float]
+    def __init__(self, simlarity: _Optional[_Iterable[float]] = ...) -> None: ...
+
+class EmbededItem(_message.Message):
+    __slots__ = ("doc", "tokens")
+    DOC_FIELD_NUMBER: _ClassVar[int]
+    TOKENS_FIELD_NUMBER: _ClassVar[int]
+    doc: Doc
+    tokens: int
+    def __init__(self, doc: _Optional[_Union[Doc, _Mapping]] = ..., tokens: _Optional[int] = ...) -> None: ...
+
 class DocItem(_message.Message):
     __slots__ = ("doc_id", "kb_ids", "doc_name_keyword", "title_tokens", "positions", "content_with_weight", "content_tokens", "image", "q_vec_size", "important_keyword", "q_vec")
     DOC_ID_FIELD_NUMBER: _ClassVar[int]

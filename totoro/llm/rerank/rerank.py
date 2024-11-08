@@ -426,3 +426,20 @@ class QWenRerank(BaseRerank):
                 rank[r.index] = r.relevance_score
             return rank, resp.usage.total_tokens
         return rank, 0
+
+
+RerankModel = {
+    "BAAI": DefaultRerank,
+    "Jina": JinaRerank,
+    "Youdao": YoudaoRerank,
+    "Xinference": XInferenceRerank,
+    "NVIDIA": NvidiaRerank,
+    "LM-Studio": LmStudioRerank,
+    "OpenAI-API-Compatible": OpenAI_APIRerank,
+    "cohere": CoHereRerank,
+    "TogetherAI": TogetherAIRerank,
+    "SILICONFLOW": SILICONFLOWRerank,
+    "BaiduYiyan": BaiduYiyanRerank,
+    "Voyage AI": VoyageRerank,
+    "Tongyi-Qianwen": QWenRerank,
+}

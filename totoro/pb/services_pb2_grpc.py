@@ -2,3 +2,131 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
+from . import services_pb2 as services__pb2
+
+
+class RAGCoreServiceStub(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.embedding = channel.unary_unary(
+                '/totoro.RAGCoreService/embedding',
+                request_serializer=services__pb2.EmbeddingRequest.SerializeToString,
+                response_deserializer=services__pb2.EmbeddingResponse.FromString,
+                )
+        self.reanking = channel.unary_unary(
+                '/totoro.RAGCoreService/reanking',
+                request_serializer=services__pb2.ReankingRequest.SerializeToString,
+                response_deserializer=services__pb2.ReankingResponse.FromString,
+                )
+        self.query = channel.unary_unary(
+                '/totoro.RAGCoreService/query',
+                request_serializer=services__pb2.QueryBuildRequest.SerializeToString,
+                response_deserializer=services__pb2.QueryBuildResponse.FromString,
+                )
+
+
+class RAGCoreServiceServicer(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def embedding(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def reanking(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def query(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_RAGCoreServiceServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'embedding': grpc.unary_unary_rpc_method_handler(
+                    servicer.embedding,
+                    request_deserializer=services__pb2.EmbeddingRequest.FromString,
+                    response_serializer=services__pb2.EmbeddingResponse.SerializeToString,
+            ),
+            'reanking': grpc.unary_unary_rpc_method_handler(
+                    servicer.reanking,
+                    request_deserializer=services__pb2.ReankingRequest.FromString,
+                    response_serializer=services__pb2.ReankingResponse.SerializeToString,
+            ),
+            'query': grpc.unary_unary_rpc_method_handler(
+                    servicer.query,
+                    request_deserializer=services__pb2.QueryBuildRequest.FromString,
+                    response_serializer=services__pb2.QueryBuildResponse.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'totoro.RAGCoreService', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+
+
+ # This class is part of an EXPERIMENTAL API.
+class RAGCoreService(object):
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def embedding(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/embedding',
+            services__pb2.EmbeddingRequest.SerializeToString,
+            services__pb2.EmbeddingResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def reanking(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/reanking',
+            services__pb2.ReankingRequest.SerializeToString,
+            services__pb2.ReankingResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def query(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/query',
+            services__pb2.QueryBuildRequest.SerializeToString,
+            services__pb2.QueryBuildResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

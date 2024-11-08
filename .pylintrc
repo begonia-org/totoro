@@ -1,0 +1,5 @@
+[TYPECHECK]
+generated-members=totoro.pb.doc_pb2.*
+
+[MASTER]
+load-plugins=pylint_protobuf

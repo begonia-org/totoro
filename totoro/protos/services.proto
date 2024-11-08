@@ -9,9 +9,67 @@ import "google/protobuf/empty.proto";
 
 message EmbeddingRequest{
  
-    string file_key=1;
+    string file_key_or_url=1[json_name="file_key_or_url"];
     string lang=2;
     ChunkType chunk_type=3[json_name="chunk_type"];
     ParserConfig parser_config=5[json_name="parser_config"];
     string embedding=6;
+    string model_api_key=7[json_name="model_api_key"];
+    string doc_title=8[json_name="doc_title"];
+}
+
+
+message EmbeddingResponse{
+    repeated EmbededItem items=1;
+}
+message CandidateTokens{
+    string token=1;
+    string doc_id=2[json_name="doc_id"];
+}
+
+message ReankingRequest{
+    string  query=1;
+    map<string,string> candidates=2;
+    string rerank=3;
+    string model_api_key=7[json_name="model_api_key"];
+
+    double keyword_simlarity_weight=4[json_name="keyword_simlarity_weight"];
+    double semantic_simlarity_weight=5[json_name="semantic_simlarity_weight"];
+
+}
+
+message ReankingResponse{
+    map<string, Smilarity> weighted_similarity_ranks =1[json_name="weighted_similarity_ranks"];
+    map<string,Smilarity>keyword_similarity_ranks=2[json_name="keyword_similarity_ranks"];
+    map<string,Smilarity>semantic_similarity_ranks=3[json_name="semantic_similarity_ranks"];
+}
+message QueryBuildRequest{
+    string query=1;
+    int32 top=2;
+    double simlarity_threshold=3;
+    string embedding=6;
+    string model_api_key=7[json_name="model_api_key"];
+}
+message QueryBuildResponse{
+    DocSearchVector vector=1;
+    }
+service  RAGCoreService{
+    rpc embedding(EmbeddingRequest) returns (EmbeddingResponse){
+        option (google.api.http) = {
+            post: "/api/v1/rag/embedding"
+            body: "*"
+        };
+    }
+    rpc reanking(ReankingRequest) returns (ReankingResponse){
+        option (google.api.http) = {
+            post: "/api/v1/rag/reanking"
+            body: "*"
+        };
+    }
+    rpc query(QueryBuildRequest) returns (QueryBuildResponse){
+        option (google.api.http) = {
+            post: "/api/v1/rag/query"
+            body: "*"
+        };
+    }
 }

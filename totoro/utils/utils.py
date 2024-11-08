@@ -14,6 +14,8 @@ import uuid
 import magic
 from snowflake import SnowflakeGenerator
 import tiktoken
+from urllib.parse import urlparse
+
 
 gen = SnowflakeGenerator(42)
 
@@ -174,3 +176,10 @@ def is_chinese(line):
         if not re.match(r"[a-zA-Z]+$", t):
             e += 1
     return e * 1. / len(arr) >= 0.7
+
+
+def is_url(path):
+    # 使用 urlparse 来解析路径
+    parsed = urlparse(path)
+    # 如果路径包含协议且网络位置（netloc）不为空，则是 URL
+    return all([parsed.scheme in ["http", "https", "ftp"], parsed.netloc])
