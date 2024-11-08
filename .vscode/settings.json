@@ -1,0 +1,25 @@
+{
+    "files.autoSave": "afterDelay",
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.focusAfterLaunch": true,
+    "python.envFile": "${workspaceFolder}/.venv",
+    "python.languageServer": "Pylance",
+    "python.terminal.shellIntegration.enabled": true,
+    "pylint.enabled": true,
+    "editor.defaultFormatter": "ms-python.autopep8",
+    "notebook.defaultFormatter": "ms-python.autopep8",
+    "flake8.path": [
+        "${workspaceFolder}/.venv/bin/flake8"
+    ],
+    "autopep8.path": [
+        "${workspaceFolder}/.venv/bin/autopep8"
+    ],
+    "isort.check": true,
+    "editor.formatOnSave": true,
+    "isort.path": [
+        "${workspaceFolder}/.venv/bin/isort"
+    ],
+    "isort.interpreter": [
+        "${workspaceFolder}/.venv/bin/python3"
+    ]
+}
