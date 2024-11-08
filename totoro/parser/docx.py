@@ -1,9 +1,11 @@
-from docx import Document
 import re
-import pandas as pd
 from collections import Counter
-from totoro.nlp.tokenizer import DocTokenizer
 from io import BytesIO
+
+import pandas as pd
+from docx import Document
+
+from totoro.nlp.tokenizer import DocTokenizer
 
 
 class DocxParser:

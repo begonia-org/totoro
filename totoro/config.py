@@ -47,3 +47,7 @@ class TotoroConfigure:
     @staticmethod
     def model_dir():
         return settings.models.download.dir
+
+    @staticmethod
+    def light():
+        return getattr(settings.models, "light") or int(os.environ.get('LIGHTEN', "0"))

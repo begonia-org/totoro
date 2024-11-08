@@ -9,7 +9,7 @@
 import os
 import pytest
 
-from totoro.biz.doc import DocEmbedding
+from totoro.biz.core import DocEmbedding
 from totoro.models.constant_model import ChunkType
 from totoro.llm.embbeding.embedding import EmbeddingModel
 from totoro.utils.logger import test_logger

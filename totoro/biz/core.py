@@ -10,19 +10,26 @@ import io
 import re
 from typing import List, Iterable, Tuple
 import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity as CosineSimilarity
 from totoro.models import constant_model, doc_model
 from totoro.pb import doc_pb2
 
 from totoro.chunker import CHUNK_BUILDERS
-from totoro.utils.utils import rm_space
+from totoro.utils.utils import rm_space, rm_WWW, is_chinese, sub_special_char
 from totoro.models.doc_model import DocSearchVector
+from totoro.nlp.tokenizer import DocTokenizer
+from totoro.nlp import term_weight, synonym
+from ..llm.rerank.rerank import BaseRerank
 from ..llm.embbeding.embedding import BaseEmbedding
 
 
-class DocEmbedding:
+class EmbeddingCore:
     def __init__(self):
         self.title_regx = re.compile(
             r"</?(table|td|caption|tr|th)( [^<>]{0,12})?>")
+        self.tokenizer = DocTokenizer()
+        self.term_weight = term_weight.TermWeight()
+        self.syn = synonym.Synonym()
 
     def chunk_file(
             self,
@@ -191,6 +198,123 @@ class DocEmbedding:
             "query_vector": [float(v) for v in qv]
         }
         return DocSearchVector(**vec)
+
+    def rerank_by_model(self, rerank_mdl: BaseRerank, query: str,
+                        candidate_tokens: List[str], tkweight=0.3,
+                        vtweight=0.7) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """
+        重排算法
+        先通过 question_keywords 提取关键词，再利用 token_similarity 计算关键词相似度，同时调用预训练模型 rerank_mdl 计算语义相似度。
+        最终通过权重合并得到综合相似度分数，用于对候选文本进行排序
+        Args:
+            rerank_mdl (BaseRerank): 预训练的重排模型
+            query (str): 查询语句，使用自然语言描述的问题
+            candidate_tokens (List[str]): candidate tokens
+            tkweight (float, optional): 关键词相似度权重. Defaults to 0.3.
+            vtweight (float, optional): 语义相似度权重. Defaults to 0.7.
+        Returns:
+            Tuple[np.ndarray, np.ndarray, np.ndarray]: 综合相似度分数，关键词相似度，语义相似度
+
+        """
+        keywords = self.question_keywords(query)
+
+        tksim = self.token_similarity(keywords, candidate_tokens)
+        vtsim, _ = rerank_mdl.similarity(
+            query, [rm_space(" ".join(tks)) for tks in candidate_tokens])
+
+        return tkweight*np.array(tksim) + vtweight*vtsim, tksim, vtsim
+
+    def question_keywords(self, txt):
+        """
+        提取问题关键词
+        Args:
+            txt (str): 自然语言查询语句
+        Returns:
+        """
+        txt = re.sub(
+            r"[ :\r\n\t,，。？?/`!！&\^%%]+",
+            " ",
+            self.tokenizer.tradi2simp(
+                self.tokenizer.strQ2B(
+                    txt.lower()))).strip()
+        txt = rm_WWW(txt)
+
+        if not is_chinese(txt):
+            return list(set([t for t in txt.split(" ") if t]))
+
+        def need_fine_grained_tokenize(tk):
+            if len(tk) < 3:
+                return False
+            if re.match(r"[0-9a-z\.\+#_\*-]+$", tk):
+                return False
+            return True
+
+        keywords = []
+        for tt in self.term_weight.split(txt)[:256]:  # .split(" "):
+            if not tt:
+                continue
+            keywords.append(tt)
+            twts = self.term_weight.weights([tt])
+            syns = self.syn.lookup(tt)
+            if syns:
+                keywords.extend(syns)
+            # logging.info(json.dumps(twts, ensure_ascii=False))
+            for tk, _ in sorted(twts, key=lambda x: x[1] * -1):
+                sm = self.tokenizer.fine_grained_tokenize(tk).split(
+                    " ") if need_fine_grained_tokenize(tk) else []
+                sm = [
+                    re.sub(
+                        r"[ ,\./;'\[\]\\`~!@#$%\^&\*\(\)=\+_<>\?:\"\{\}\|，。；‘’【】、！￥……（）——《》？：“”-]+",
+                        "",
+                        m) for m in sm]
+                sm = [sub_special_char(m) for m in sm if len(m) > 1]
+                sm = [m for m in sm if len(m) > 1]
+
+                keywords.append(re.sub(r"[ \\\"']+", "", tk))
+                keywords.extend(sm)
+                if len(keywords) >= 12:
+                    break
+
+        return list(set(keywords))
+
+    def hybrid_similarity(self, avec, bvecs, atks, btkss, tkweight=0.3,
+                          vtweight=0.7):
+
+        sims = CosineSimilarity([avec], bvecs)
+        tksim = self.token_similarity(atks, btkss)
+        return np.array(sims[0]) * vtweight + \
+            np.array(tksim) * tkweight, tksim, sims[0]
+
+    def token_similarity(self, atks, btkss):
+        def toDict(tks):
+            d = {}
+            if isinstance(tks, str):
+                tks = tks.split(" ")
+            for t, c in self.term_weight.weights(tks, preprocess=False):
+                if t not in d:
+                    d[t] = 0
+                d[t] += c
+            return d
+
+        atks = toDict(atks)
+        btkss = [toDict(tks) for tks in btkss]
+        return [self.similarity(atks, btks) for btks in btkss]
+
+    def similarity(self, qtwt, dtwt):
+        if isinstance(dtwt, type("")):
+            dtwt = {t: w for t, w in self.term_weight.weights(
+                self.term_weight.split(dtwt), preprocess=False)}
+        if isinstance(qtwt, type("")):
+            qtwt = {t: w for t, w in self.term_weight.weights(
+                self.term_weight.split(qtwt), preprocess=False)}
+        s = 1e-9
+        for k, v in qtwt.items():
+            if k in dtwt:
+                s += v  # * dtwt[k]
+        q = 1e-9
+        for k, v in qtwt.items():
+            q += v
+        return s / q
 
     def callback(self, tid):
         def call(prog=0.0, msg="ok"):

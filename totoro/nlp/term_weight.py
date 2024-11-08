@@ -20,6 +20,7 @@ from .tokenizer import DocTokenizer
 
 class TermWeight:
     def __init__(self):
+        self.tokenizer = tokenizer.DocTokenizer()
         self.stop_words = set(["请问",
                                "您",
                                "你",
@@ -155,11 +156,7 @@ class TermWeight:
                 tks.append(t)
         return tks
 
-    def weights(self, tks):
-        def skill(t):
-            if t not in self.sk:
-                return 1
-            return 6
+    def weights(self, tks, preprocess=True):
 
         def ner(t):
             if re.match(r"[0-9,.]{2,}$", t):
@@ -221,66 +218,20 @@ class TermWeight:
         def idf(s, N): return math.log10(10 + ((N - s + 0.5) / (s + 0.5)))
 
         tw = []
-        for tk in tks:
-            tt = self.token_merge(self.pre_token(tk, True))
-            idf1 = np.array([idf(freq(t), 10000000) for t in tt])
-            idf2 = np.array([idf(df(t), 1000000000) for t in tt])
+        if not preprocess:
+            idf1 = np.array([idf(freq(t), 10000000) for t in tks])
+            idf2 = np.array([idf(df(t), 1000000000) for t in tks])
             wts = (0.3 * idf1 + 0.7 * idf2) * \
-                np.array([ner(t) * postag(t) for t in tt])
-
-            tw.extend(zip(tt, wts))
+                np.array([ner(t) * postag(t) for t in tks])
+            tw = zip(tks, wts)
+        else:
+            for tk in tks:
+                tt = self.token_merge(self.pre_token(tk, True))
+                idf1 = np.array([idf(freq(t), 10000000) for t in tt])
+                idf2 = np.array([idf(df(t), 1000000000) for t in tt])
+                wts = (0.3 * idf1 + 0.7 * idf2) * \
+                    np.array([ner(t) * postag(t) for t in tt])
+                tw.extend(zip(tt, wts))
 
         S = np.sum([s for _, s in tw])
         return [(t, s / S) for t, s in tw]
-
-    def token_merge(self, tks):
-        def oneTerm(t): return len(t) == 1 or re.match(r"[0-9a-z]{1,2}$", t)
-
-        res, i = [], 0
-        while i < len(tks):
-            j = i
-            if i == 0 and oneTerm(tks[i]) and len(
-                    tks) > 1 and (len(tks[i + 1]) > 1 and not re.match(r"[0-9a-zA-Z]", tks[i + 1])):  # 多 工位
-                res.append(" ".join(tks[0:2]))
-                i = 2
-                continue
-
-            while j < len(
-                    tks) and tks[j] and tks[j] not in self.stop_words and oneTerm(tks[j]):
-                j += 1
-            if j - i > 1:
-                if j - i < 5:
-                    res.append(" ".join(tks[i:j]))
-                    i = j
-                else:
-                    res.append(" ".join(tks[i:i + 2]))
-                    i = i + 2
-            else:
-                if len(tks[i]) > 0:
-                    res.append(tks[i])
-                i += 1
-        return [t for t in res if t]
-
-    def pre_token(self, txt, num=False, stpwd=True):
-        patt = [
-            r"[~—\t @#%!<>,\.\?\":;'\{\}\[\]_=\(\)\|，。？》•●○↓《；‘’：“”【¥ 】…￥！、·（）×`&\\/「」\\]"
-        ]
-        rewt = [
-        ]
-        for p, r in rewt:
-            txt = re.sub(p, r, txt)
-
-        res = []
-        for t in self.tokenizer.tokenize(txt).split(" "):
-            tk = t
-            if (stpwd and tk in self.stop_words) or (
-                    re.match(r"[0-9]$", tk) and not num):
-                continue
-            for p in patt:
-                if re.match(p, t):
-                    tk = "#"
-                    break
-            tk = re.sub(r"([\+\\-])", r"\\\1", tk)
-            if tk != "#" and tk:
-                res.append(tk)
-        return res

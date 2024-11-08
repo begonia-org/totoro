@@ -19,7 +19,6 @@ import nltk
 import datrie
 from hanziconv import HanziConv
 from nltk import word_tokenize
-from nltk.data import find
 
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 
@@ -95,7 +94,8 @@ class DocTokenizer(object):
             nltk.data.find("corpora/wordnet.zip")
         except Exception as e:
             import traceback
-            print(f"[HUQIE]:Download wordnet error {str(e)},traceback:{traceback.format_exc()}")
+            print(
+                f"[HUQIE]:Download wordnet error {str(e)},traceback:{traceback.format_exc()}")
             nltk.download('wordnet')
 
     def tokenize_table_kb(self, d: doc_pb2.Doc, t, eng):

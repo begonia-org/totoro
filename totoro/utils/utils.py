@@ -13,6 +13,7 @@ import uuid
 
 import magic
 from snowflake import SnowflakeGenerator
+import tiktoken
 
 gen = SnowflakeGenerator(42)
 
@@ -131,3 +132,45 @@ def is_audio(file) -> str:
 def rm_space(txt):
     txt = re.sub(r"([^a-z0-9.,]) +([^ ])", r"\1\2", txt, flags=re.IGNORECASE)
     return re.sub(r"([^ ]) +([^a-z0-9.,])", r"\1\2", txt, flags=re.IGNORECASE)
+
+
+encoder = tiktoken.encoding_for_model("gpt-3.5-turbo")
+
+
+def num_tokens_from_string(string: str) -> int:
+    """Returns the number of tokens in a text string."""
+    try:
+        return len(encoder.encode(string))
+    except Exception:
+        return 0
+
+
+def truncate(string: str, max_len: int) -> str:
+    """Returns truncated text if the length of text exceed max_len."""
+    return encoder.decode(encoder.encode(string)[:max_len])
+
+
+def rm_WWW(txt):
+    patts = [
+        (r"是*(什么样的|哪家|一下|那家|请问|啥样|咋样了|什么时候|何时|何地|何人|是否|是不是|多少|哪里|怎么|哪儿|怎么样|如何|哪些|是啥|啥是|啊|吗|呢|吧|咋|什么|有没有|呀)是*", ""),
+        (r"(^| )(what|who|how|which|where|why)('re|'s)? ", " "),
+        (r"(^| )('s|'re|is|are|were|was|do|does|did|don't|doesn't|didn't|has|have|be|there|you|me|your|my|mine|just|please|may|i|should|would|wouldn't|will|won't|done|go|for|with|so|the|a|an|by|i'm|it's|he's|she's|they|they're|you're|as|by|on|in|at|up|out|down|of) ", " ")
+    ]
+    for r, p in patts:
+        txt = re.sub(r, p, txt, flags=re.IGNORECASE)
+    return txt
+
+
+def sub_special_char(line):
+    return re.sub(r"([:\{\}/\[\]\-\*\"\(\)\|\+~\^])", r"\\\1", line).strip()
+
+
+def is_chinese(line):
+    arr = re.split(r"[ \t]+", line)
+    if len(arr) <= 3:
+        return True
+    e = 0
+    for t in arr:
+        if not re.match(r"[a-zA-Z]+$", t):
+            e += 1
+    return e * 1. / len(arr) >= 0.7
