@@ -1,3 +1,0 @@
-[submodule "totoro/protos/common"]
-	path = totoro/protos/common
-	url = git@github.com:begonia-org/begonia-common.git
