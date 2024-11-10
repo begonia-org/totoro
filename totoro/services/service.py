@@ -48,16 +48,16 @@ class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
     def reanking(self, request: services_pb2.ReankingRequest, context):
         factory = request.rerank.split("/")[0]
         return self.__core.reranking(request.query, request.candidates,
-                                   RerankModel[factory](
-                                       request.model_api_key, request.rerank),
-                                   request.keyword_simlarity_weight,
-                                   request.semantic_simlarity_weight)
+                                     RerankModel[factory](
+                                         request.model_api_key, request.rerank),
+                                     request.keyword_simlarity_weight,
+                                     request.semantic_simlarity_weight)
 
     def query(self, request: services_pb2.QueryBuildRequest, context) -> services_pb2.QueryBuildResponse:
         factory = request.embedding.split("/")[0]
         return self.__core.build_query_vector(request.query,
-                                            EmbeddingModel[factory](request.model_api_key,
-                                                                    request.embedding))
+                                              EmbeddingModel[factory](request.model_api_key,
+                                                                      request.embedding))
 
     def __get_file(self, tmp: IO, file_key_or_url: str):
         if is_url(file_key_or_url):

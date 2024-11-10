@@ -3,6 +3,7 @@ import doc_pb2 as _doc_pb2
 import pydantic_pb2 as _pydantic_pb2
 from google.api import annotations_pb2 as _annotations_pb2
 from google.protobuf import empty_pb2 as _empty_pb2
+from begonia.api.v1 import options_pb2 as _options_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
