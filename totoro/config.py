@@ -3,51 +3,67 @@
 '''
 @File    :   config.py
 @Time    :   2024/11/04 11:16:29
-@Desc    :   
+@Desc    :   Configuration module with singleton pattern and customizable project root.
 '''
-
 
 import os
 from dynaconf import Dynaconf
-
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-settings = Dynaconf(
-    envvar_prefix="TOTORO",
-    environments=True,
-    root_path=project_root,
-    settings_files=['settings.yaml', '.secrets.yaml',
-                    "settings.dev.yaml", "settings.prod.yaml", "settings.test.yaml"],
-)
-
-# `envvar_prefix` = export envvars with `export DYNACONF_FOO=bar`.
-# `settings_files` = Load these files in the order.
-
-
-settings["ROOT_PATH"] = os.path.dirname(os.path.abspath(__file__))
-
+from typing import Optional
 
 class TotoroConfigure:
+    _instance = None  # Class variable to hold the singleton instance
 
-    @staticmethod
-    def get_project_root() -> str:
-        return settings.ROOT_PATH
+    def __new__(cls, project_root: Optional[str] = None):
+        if cls._instance is None:
+            cls._instance = super(TotoroConfigure, cls).__new__(cls)
 
-    @staticmethod
-    def get_logger_level() -> str:
-        return settings.log.level.upper()
+            # Determine the project root, allowing for customization
+            if project_root is None:
+                project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-    @staticmethod
-    def get_models_downloads() -> str:
-        return settings.models.download.dir
+            # Initialize Dynaconf settings
+            cls._instance.settings = Dynaconf(
+                envvar_prefix="TOTORO",
+                environments=True,
+                root_path=project_root,
+                settings_files=[
+                    'settings.yaml', 
+                    '.secrets.yaml',
+                    "settings.dev.yaml", 
+                    "settings.prod.yaml", 
+                    "settings.test.yaml"
+                ],
+            )
 
-    @staticmethod
-    def get_maxinum_docs() -> int:
-        return int(settings.doc.maximum) * 1024 * 1024
+            # Set additional settings attributes
+            cls._instance.settings["ROOT_PATH"] = project_root
 
-    @staticmethod
-    def model_dir():
-        return settings.models.download.dir
+        return cls._instance
 
-    @staticmethod
-    def light():
-        return getattr(settings.models, "light") or int(os.environ.get('LIGHTEN', "0"))
+    @property
+    def project_root(self) -> str:
+        return self.settings.ROOT_PATH
+
+    @property
+    def logger_level(self) -> str:
+        return self.settings.log.level.upper()
+
+    @property
+    def models_downloads(self) -> str:
+        return self.settings.models.download.dir
+
+    @property
+    def maximum_docs(self) -> int:
+        return int(self.settings.doc.maximum) * 1024 * 1024
+
+    @property
+    def model_dir(self) -> str:
+        return self.settings.models.download.dir
+
+    @property
+    def light(self) -> int:
+        return getattr(self.settings.models, "light", int(os.environ.get('LIGHTEN', "0")))
+
+# Usage example:
+# config = TotoroConfigure("/custom/project/root")
+# project_root = config.project_root
