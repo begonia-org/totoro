@@ -13,7 +13,7 @@
 
 import os
 from copy import deepcopy
-
+import numpy as np
 import onnxruntime as ort
 from huggingface_hub import snapshot_download
 

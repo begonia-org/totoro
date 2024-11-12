@@ -186,3 +186,7 @@ def is_url(path):
     parsed = urlparse(path)
     # 如果路径包含协议且网络位置（netloc）不为空，则是 URL
     return all([parsed.scheme in ["http", "https", "ftp"], parsed.netloc])
+
+
+def get_now_datetime():
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
