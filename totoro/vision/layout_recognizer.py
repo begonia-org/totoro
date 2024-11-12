@@ -16,7 +16,6 @@ from collections import Counter
 from copy import deepcopy
 import numpy as np
 from huggingface_hub import snapshot_download
-
 from totoro.config import TotoroConfigure as cfg
 from .recognizer import Recognizer
 
@@ -39,13 +38,13 @@ class LayoutRecognizer(Recognizer):
     def __init__(self, domain):
         try:
             model_dir = os.path.join(
-                cfg.get_project_root(),
-                "res/deepdoc")
+                cfg().totoro_dir,
+                "res/doc")
             super().__init__(self.labels, domain, model_dir)
         except Exception as e:
             model_dir = snapshot_download(repo_id="InfiniFlow/deepdoc",
                                           local_dir=os.path.join(
-                                              cfg.get_project_root(), "res/deepdoc"),
+                                              cfg().totoro_dir, "res/doc"),
                                           local_dir_use_symlinks=False)
             super().__init__(self.labels, domain, model_dir)
 

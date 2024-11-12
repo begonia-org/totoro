@@ -9,8 +9,9 @@ __pycache__/
 # C extensions
 *.so
 run.txt
-totoro/res/deepdoc/
-totoro/res/deepdoc
+totoro/res/doc/
+totoro/res/doc
+totoro/res/doc/*
 
 # Distribution / packaging
 .Python

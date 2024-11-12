@@ -71,7 +71,7 @@ class RAGCore:
 
         # 初始化一个计数器，用于计算总的 token 数量
         tk_count = 0
-        print(f"tts:{tts},cnts:{cnts}")
+        # print(f"tts:{tts},cnts:{cnts}")
         # 如果标题和内容的数量相等，才继续处理
         if len(tts) == len(cnts):
             # 初始化一个空的 NumPy 数组，用于存储标题的向量表示
@@ -81,7 +81,7 @@ class RAGCore:
             for i in range(0, len(tts), batch_size):
                 # 使用嵌入模型对标题文本进行编码，返回向量和处理的 token 数量
                 vts, c = embed.encode(tts[i: i + batch_size])
-                print(f"tts vts:{vts},c:{c},text:{tts[i: i + batch_size]}")
+                # print(f"tts vts:{vts},c:{c},text:{tts[i: i + batch_size]}")
 
                 # 如果这是第一个批次，则直接将结果赋值给 tts_
                 if len(tts_) == 0:
@@ -109,7 +109,7 @@ class RAGCore:
             vts, c = embed.encode(cnts[i: i + batch_size])
             np.set_printoptions(precision=20)
 
-            print(f"vts:{vts},c:{c}")
+            # print(f"vts:{vts},c:{c}")
             # 如果这是第一个批次，则直接将结果赋值给 cnts_
             if len(cnts_) == 0:
                 cnts_ = vts
@@ -129,7 +129,7 @@ class RAGCore:
 
         # 从 parser_config 中获取标题权重，并计算最终的向量
         title_w = float(parser_config.filename_embd_weight)
-        print(f"title_w:{title_w},tts:{tts},cnts:{cnts}")
+        # print(f"title_w:{title_w},tts:{tts},cnts:{cnts}")
         # 如果标题和内容的长度相等，则按照权重将标题和内容的向量合并；否则，仅使用内容向量
         vects = (title_w * tts + (1 - title_w) *
                  cnts) if len(tts) == len(cnts) else cnts
@@ -140,7 +140,7 @@ class RAGCore:
         # 对每个文档，生成最终的向量并附加到文档中
         for i, d in enumerate(docs):
             v = vects[i].tolist()  # 将向量转为列表形式
-            print(f"q_{len(v)}_vec: {v}")
+            # print(f"q_{len(v)}_vec: {v}")
 
             d.q_vec.extend(v)  # 将向量扩展到文档的 q_vec 字段中
             d.q_vec_size = len(v)  # 记录向量的大小
@@ -200,8 +200,8 @@ class RAGCore:
         return DocSearchVector(**vec)
 
     def reranking(self, rerank_mdl: BaseRerank, query: str,
-                        candidate_tokens: List[str], tkweight=0.3,
-                        vtweight=0.7) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+                  candidate_tokens: List[str], tkweight=0.3,
+                  vtweight=0.7) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         重排算法
         先通过 question_keywords 提取关键词，再利用 token_similarity 计算关键词相似度，同时调用预训练模型 rerank_mdl 计算语义相似度。
@@ -322,8 +322,8 @@ class RAGCore:
             # document_logger.debug(f"tid:{tid},progress:{prog},msg:{msg}")
             # self.task_repo.add_task_progress(
             #     tid, doc_model.DocDegreeProgress(message=msg, progress=prog))
-            # self.rdb.set(cfg.get_doc_task_key(fid, kib),
+            # self.rdb.set(cfg().get_doc_task_key(fid, kib),
             #              doc_model.DocDegreeProgress(message=msg, progress=prog).model_dump_json(),
-            #              ex=cfg.get_doc_task_key_expire())
+            #              ex=cfg().get_doc_task_key_expire())
 
         return call

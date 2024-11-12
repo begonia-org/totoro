@@ -16,18 +16,19 @@ import json
 import os
 import pandas as pd
 from totoro.nlp import tokenizer
+from totoro.config import TotoroConfigure as cfg
 from . import regions
 current_file_path = os.path.dirname(os.path.abspath(__file__))
-GOODS = pd.read_csv(os.path.join(current_file_path,
+GOODS = pd.read_csv(os.path.join(cfg().totoro_dir,
                     "res/corp_baike_len.csv"), sep="\t", header=0).fillna(0)
 GOODS["cid"] = GOODS["cid"].astype(str)
 GOODS = GOODS.set_index(["cid"])
 CORP_TKS = json.load(
-    open(os.path.join(current_file_path, "res/corp.tks.freq.json"), "r"))
+    open(os.path.join(cfg().totoro_dir, "res/corp.tks.freq.json"), "r"))
 GOOD_CORP = json.load(
-    open(os.path.join(current_file_path, "res/good_corp.json"), "r"))
+    open(os.path.join(cfg().totoro_dir, "res/good_corp.json"), "r"))
 CORP_TAG = json.load(
-    open(os.path.join(current_file_path, "res/corp_tag.json"), "r"))
+    open(os.path.join(cfg().totoro_dir, "res/corp_tag.json"), "r"))
 
 
 def baike(cid, default_v=0):

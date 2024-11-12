@@ -37,13 +37,13 @@ class Recognizer(object):
         """
         if not model_dir:
             model_dir = os.path.join(
-                cfg.get_project_root(),
-                "res/deepdoc")
+                cfg().totoro_dir,
+                "res/doc")
             model_file_path = os.path.join(model_dir, task_name + ".onnx")
             if not os.path.exists(model_file_path):
                 model_dir = snapshot_download(repo_id="InfiniFlow/deepdoc",
                                               local_dir=os.path.join(
-                                                  cfg.get_project_root(), "res/deepdoc"),
+                                                  cfg().totoro_dir, "res/doc"),
                                               local_dir_use_symlinks=False)
                 model_file_path = os.path.join(model_dir, task_name + ".onnx")
         else:

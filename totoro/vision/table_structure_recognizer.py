@@ -37,8 +37,8 @@ class TableStructureRecognizer(Recognizer):
         self.tokenizer = DocTokenizer()
         try:
             super().__init__(self.labels, "tsr", os.path.join(
-                cfg.get_project_root(),
-                "res/deepdoc"))
+                cfg().totoro_dir,
+                "res/doc"))
         except Exception as e:
             super().__init__(
                 self.labels,
@@ -46,8 +46,8 @@ class TableStructureRecognizer(Recognizer):
                 snapshot_download(
                     repo_id="InfiniFlow/deepdoc",
                     local_dir=os.path.join(
-                        cfg.get_project_root(),
-                        "res/deepdoc"),
+                        cfg().totoro_dir,
+                        "res/doc"),
                     local_dir_use_symlinks=False))
 
     def __call__(self, images, thr=0.2):

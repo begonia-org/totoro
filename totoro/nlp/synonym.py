@@ -22,7 +22,7 @@ class Synonym:
         self.lookup_num = 100000000
         self.load_tm = time.time() - 1000000
         self.dictionary = None
-        path = os.path.join(cfg.get_project_root(), "res", "synonym.json")
+        path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "res", "synonym.json")
         try:
             with open(path, 'r') as json_file:
                 self.dictionary = json.load(json_file)

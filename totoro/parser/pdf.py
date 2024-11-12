@@ -49,15 +49,16 @@ class OpenDocPdfParser:
             self.updown_cnt_mdl.set_param({"device": "cuda"})
         try:
             model_dir = os.path.join(
-                cfg.get_project_root(),
+                os.path.dirname(os.path.dirname(__file__)),
                 "res/doc")
             self.updown_cnt_mdl.load_model(os.path.join(
                 model_dir, "updown_concat_xgb.model"))
         except Exception as e:
-            logger.error(f"Load model failed {str(e)}, try to download from HuggingFace.")
+            logger.error(
+                f"Load model failed {str(e)}, try to download from HuggingFace.")
             model_dir = snapshot_download(
                 repo_id="InfiniFlow/text_concat_xgb_v1.0",
-                local_dir=os.path.join(cfg.get_project_root(), "res/doc"),
+                local_dir=os.path.join(os.path.dirname(os.path.dirname(__file__)), "res/doc"),
                 local_dir_use_symlinks=False)
             self.updown_cnt_mdl.load_model(os.path.join(
                 model_dir, "updown_concat_xgb.model"))
@@ -155,7 +156,8 @@ class OpenDocPdfParser:
             tks_down[-1] == tks_up[-1],
             max(down["in_row"], up["in_row"]),
             abs(down["in_row"] - up["in_row"]),
-            len(tks_down) == 1 and self.tokenizer.tag(tks_down[0]).find("n") >= 0,
+            len(tks_down) == 1 and self.tokenizer.tag(
+                tks_down[0]).find("n") >= 0,
             len(tks_up) == 1 and self.tokenizer.tag(tks_up[0]).find("n") >= 0
         ]
         return fea
@@ -616,9 +618,9 @@ class OpenDocPdfParser:
             lout_no = str(self.boxes[i]["page_number"]) + \
                 "-" + str(self.boxes[i]["layoutno"])
             if self.tbl_det.is_caption(self.boxes[i]) or self.boxes[i]["layout_type"] in ["table caption",
-                                                                                                      "title",
-                                                                                                      "figure caption",
-                                                                                                      "reference"]:
+                                                                                          "title",
+                                                                                          "figure caption",
+                                                                                          "reference"]:
                 nomerge_lout_no.append(lst_lout_no)
             if self.boxes[i]["layout_type"] == "table":
                 if re.match(r"(数据|资料|图表)*来源[:： ]", self.boxes[i]["text"]):
@@ -731,7 +733,8 @@ class OpenDocPdfParser:
                     "x1": np.max([b["x1"] for b in bxs]),
                     "bottom": np.max([b["bottom"] for b in bxs]) - ht
                 }
-                louts = [line for line in self.page_layout[pn] if line["type"] == ltype]
+                louts = [line for line in self.page_layout[pn]
+                         if line["type"] == ltype]
                 ii = Recognizer.find_overlapped(b, louts, naive=True)
                 if ii is not None:
                     b = louts[ii]
@@ -910,7 +913,7 @@ class OpenDocPdfParser:
 
         return "\n\n".join(res)
 
-    def total_page_number(self,fnm, binary=None):
+    def total_page_number(self, fnm, binary=None):
         try:
             pdf = pdfplumber.open(
                 fnm) if not binary else pdfplumber.open(BytesIO(binary))
@@ -1019,7 +1022,7 @@ class OpenDocPdfParser:
     def remove_tag(self, txt):
         return re.sub(r"@@[\t0-9.-]+?##", "", txt)
 
-    def crop(self, text, ZM=3, need_position=False)->Image.Image:
+    def crop(self, text, ZM=3, need_position=False) -> Image.Image:
         imgs = []
         poss = []
         for tag in re.findall(r"@@[0-9-]+\t[0-9.\t]+##", text):

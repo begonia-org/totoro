@@ -66,14 +66,14 @@ class MediaParser:
 
     def _download_model(self, model_id: str):
         print(os.path.exists(os.path.join(
-            cfg.model_dir(), os.path.basename(model_id))))
-        if not os.path.exists(os.path.join(cfg.model_dir(), os.path.basename(model_id))):
+            cfg().model_dir(), os.path.basename(model_id))))
+        if not os.path.exists(os.path.join(cfg().model_dir(), os.path.basename(model_id))):
             model_dir = snapshot_download(repo_id=model_id,
-                                          local_dir=cfg.model_dir(),
+                                          local_dir=cfg().model_dir(),
                                           local_dir_use_symlinks=False)
             return model_dir
 
-        return os.path.join(cfg.model_dir(), os.path.basename(model_id))
+        return os.path.join(cfg().model_dir(), os.path.basename(model_id))
 
     def apply(self, fnm: str):
         if is_video(fnm):

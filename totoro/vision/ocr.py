@@ -19,7 +19,7 @@ import cv2
 import traceback
 from huggingface_hub import snapshot_download
 
-from totoro.config import TotoroConfigure
+from totoro.config import TotoroConfigure as cfg
 import numpy as np
 import onnxruntime as ort
 
@@ -72,6 +72,7 @@ def load_model(model_dir, nm):
     options.execution_mode = ort.ExecutionMode.ORT_SEQUENTIAL
     options.intra_op_num_threads = 2
     options.inter_op_num_threads = 2
+    logger.debug(f"device:{ort.get_device()}")
     if ort.get_device() == "GPU":
         logger.debug("Using GPU")
         sess = ort.InferenceSession(
@@ -485,8 +486,8 @@ class OCR(object):
         if not model_dir:
             try:
                 model_dir = os.path.join(
-                    TotoroConfigure.get_project_root(),
-                    "res/deepdoc")
+                    cfg().totoro_dir,
+                    "res/doc")
                 self.text_detector = TextDetector(model_dir)
                 self.text_recognizer = TextRecognizer(model_dir)
             except Exception as e:
@@ -495,7 +496,7 @@ class OCR(object):
 
                 model_dir = snapshot_download(repo_id="InfiniFlow/deepdoc",
                                               local_dir=os.path.join(
-                                                  TotoroConfigure.get_project_root(), "res/deepdoc"),
+                                                  cfg().totoro_dir, "res/doc"),
                                               local_dir_use_symlinks=False)
                 self.text_detector = TextDetector(model_dir)
                 self.text_recognizer = TextRecognizer(model_dir)

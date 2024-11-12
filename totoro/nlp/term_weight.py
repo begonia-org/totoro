@@ -73,7 +73,7 @@ class TermWeight:
                 return set(res.keys())
             return res
 
-        fnm = os.path.join(cfg.get_project_root(), "res")
+        fnm = os.path.join(os.path.dirname(os.path.dirname(__file__)), "res")
         self.ne, self.df = {}, {}
         try:
             with open(os.path.join(fnm, "ner.json"), "r") as f:

@@ -5,6 +5,7 @@
 @Time    :   2024/09/07 11:16:45
 @Desc    :
 '''
+import os
 import datetime
 import io
 import re
@@ -136,6 +137,8 @@ def rm_space(txt):
     return re.sub(r"([^ ]) +([^a-z0-9.,])", r"\1\2", txt, flags=re.IGNORECASE)
 
 
+os.environ["TIKTOKEN_CACHE_DIR"] = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)), "res")
 encoder = tiktoken.encoding_for_model("gpt-3.5-turbo")
 
 

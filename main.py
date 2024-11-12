@@ -13,17 +13,20 @@ from typing import List
 import faiss
 import numpy as np
 
-from totoro.biz.core import EmbeddingCore
+from totoro.biz.core import RAGCore
 from totoro.models.constant_model import ChunkType
 from totoro.models.doc_model import Doc
 from totoro.llm.embbeding.embedding import EmbeddingModel
-from totoro.utils.logger import test_logger
+from totoro.utils import logger
+from totoro.config import init
 
 
 def main():
-    embedding = EmbeddingCore()
+    init(os.path.dirname(__file__))
+    logger.init()
+    embedding = RAGCore()
     data_dir = os.path.join(os.path.dirname(__file__), "tests", "data")
-    test_logger.debug(data_dir)
+    logger.test_logger.debug(data_dir)
     file = os.path.join(data_dir, "test_zh.docx")
     ret = embedding.build_embedding(
         file, "test_zh", ChunkType.CHUNK_TYPE_NAIVE, 1, EmbeddingModel["BAAI"]("", "BAAI/bge-large-zh-v1.5"))

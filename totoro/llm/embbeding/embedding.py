@@ -30,14 +30,14 @@ from totoro.utils.logger import nlp_logger
 
 
 class BaseEmbedding(ABC):
-    def __init__(self, key, model_name, models_dir=cfg.model_dir()):
+    def __init__(self, key, model_name, models_dir=None):
         """The base class for embedding models.
         Args:
             key (str): The API key for the embedding model.
             model_name (str): The name of the model.
             models_dir (str): The directory to save the model.
         """
-        self.models_dir = models_dir
+        self.models_dir = models_dir or cfg().model_dir
         os.makedirs(self.models_dir, exist_ok=True)
         self.model_encoder = ModelEncoder()
 

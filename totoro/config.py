@@ -7,8 +7,14 @@
 '''
 
 import os
+import sys
 from dynaconf import Dynaconf
 from typing import Optional
+from loguru import logger
+
+
+logger.remove()
+
 
 class TotoroConfigure:
     _instance = None  # Class variable to hold the singleton instance
@@ -19,7 +25,8 @@ class TotoroConfigure:
 
             # Determine the project root, allowing for customization
             if project_root is None:
-                project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                project_root = os.path.dirname(
+                    os.path.dirname(os.path.abspath(__file__)))
 
             # Initialize Dynaconf settings
             cls._instance.settings = Dynaconf(
@@ -27,10 +34,10 @@ class TotoroConfigure:
                 environments=True,
                 root_path=project_root,
                 settings_files=[
-                    'settings.yaml', 
+                    'settings.yaml',
                     '.secrets.yaml',
-                    "settings.dev.yaml", 
-                    "settings.prod.yaml", 
+                    "settings.dev.yaml",
+                    "settings.prod.yaml",
                     "settings.test.yaml"
                 ],
             )
@@ -64,6 +71,22 @@ class TotoroConfigure:
     def light(self) -> int:
         return getattr(self.settings.models, "light", int(os.environ.get('LIGHTEN', "0")))
 
+    @property
+    def totoro_dir(self) -> str:
+        return os.path.dirname(__file__)
+
+
 # Usage example:
 # config = TotoroConfigure("/custom/project/root")
 # project_root = config.project_root
+# cfg = None
+
+
+def init(project_root=None):
+    # global cfg
+    cfg = TotoroConfigure(project_root=project_root)
+    logger.add(
+        sys.stdout,
+        colorize=True,
+        format="<green>{time}</green> <cyan>{file}</cyan>:<cyan>{line}</cyan> <level>{message}</level>",
+        level=cfg.logger_level)

@@ -67,7 +67,7 @@ class DocTokenizer(object):
         root = os.path.dirname(os.path.dirname(
             os.path.dirname(os.path.abspath(__file__))))
         self.DIR_ = os.path.join(
-            root, "res", "huqie")
+            os.path.dirname(os.path.dirname(__file__)), "res", "huqie")
 
         self.stemmer = PorterStemmer()
         self.lemmatizer = WordNetLemmatizer()

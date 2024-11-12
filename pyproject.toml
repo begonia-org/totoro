@@ -55,6 +55,7 @@ pylint-protobuf = "^0.22.0"
 fastapi = "^0.115.4"
 grpcio = "^1.67.1"
 uvicorn = "^0.32.0"
+onnxruntime-gpu = "^1.20.0"
 
 [[tool.poetry.source]]
 name = "mirrors"

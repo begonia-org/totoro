@@ -10,7 +10,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-import os, sys
+import numpy as np
+import re
+import argparse
+from api.utils.file_utils import get_project_base_directory
+from deepdoc.vision import Recognizer, LayoutRecognizer, TableStructureRecognizer, OCR, init_in_out
+from deepdoc.vision.seeit import draw_box
+import os
+import sys
 sys.path.insert(
     0,
     os.path.abspath(
@@ -18,13 +25,6 @@ sys.path.insert(
             os.path.dirname(
                 os.path.abspath(__file__)),
             '../../')))
-
-from deepdoc.vision.seeit import draw_box
-from deepdoc.vision import Recognizer, LayoutRecognizer, TableStructureRecognizer, OCR, init_in_out
-from api.utils.file_utils import get_project_base_directory
-import argparse
-import re
-import numpy as np
 
 
 def main(args):
@@ -36,7 +36,7 @@ def main(args):
             "layout",
             os.path.join(
                 get_project_base_directory(),
-                "rag/res/deepdoc/"))
+                "rag/res/doc/"))
     if args.mode.lower() == "tsr":
         labels = TableStructureRecognizer.labels
         detr = TableStructureRecognizer()
@@ -45,7 +45,7 @@ def main(args):
     layouts = detr(images, float(args.threshold))
     for i, lyt in enumerate(layouts):
         if args.mode.lower() == "tsr":
-            #lyt = [t for t in lyt if t["type"] == "table column"]
+            # lyt = [t for t in lyt if t["type"] == "table column"]
             html = get_table_html(images[i], lyt, ocr)
             with open(outputs[i] + ".html", "w+") as f:
                 f.write(html)

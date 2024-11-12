@@ -33,8 +33,8 @@ def sigmoid(x):
 
 
 class BaseRerank(ABC):
-    def __init__(self, key, model_name, models_dir=cfg.model_dir()):
-        self.models_dir = models_dir
+    def __init__(self, key, model_name, models_dir=None):
+        self.models_dir = models_dir or cfg().model_dir()
 
     def similarity(self, query: str, texts: list):
         raise NotImplementedError("Please implement encode method!")
@@ -57,19 +57,19 @@ class DefaultRerank(BaseRerank):
 
         """
         super().__init__(key, model_name, **kwargs)
-        if not cfg.light() and not DefaultRerank._model:
+        if not cfg().light() and not DefaultRerank._model:
             import torch
             from FlagEmbedding import FlagReranker
             with DefaultRerank._model_lock:
                 if not DefaultRerank._model:
                     try:
                         DefaultRerank._model = FlagReranker(
-                            os.path.join(cfg.model_dir(), re.sub(
+                            os.path.join(cfg().model_dir(), re.sub(
                                 r"^[a-zA-Z]+/", "", model_name)),
                             use_fp16=torch.cuda.is_available())
                     except Exception as e:
                         model_dir = snapshot_download(repo_id=model_name,
-                                                      local_dir=os.path.join(cfg.model_dir(),
+                                                      local_dir=os.path.join(cfg().model_dir(),
                                                                              re.sub(r"^[a-zA-Z]+/", "", model_name)),
                                                       local_dir_use_symlinks=False)
                         DefaultRerank._model = FlagReranker(
@@ -126,7 +126,7 @@ class YoudaoRerank(DefaultRerank):
 
     def __init__(self, key=None, model_name="maidalun1020/bce-reranker-base_v1", **kwargs):
         super().__init__(key, model_name, **kwargs)
-        if not cfg.light() and not YoudaoRerank._model:
+        if not cfg().light() and not YoudaoRerank._model:
             from BCEmbedding import RerankerModel
             with YoudaoRerank._model_lock:
                 if not YoudaoRerank._model:
