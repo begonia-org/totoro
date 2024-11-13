@@ -88,5 +88,5 @@ def init(project_root=None):
     logger.add(
         sys.stdout,
         colorize=True,
-        format="<green>{time}</green> <cyan>{file}</cyan>:<cyan>{line}</cyan> <level>{message}</level>",
+        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> <cyan>{file}</cyan>:<cyan>{line}</cyan> <level>{message}</level>",
         level=cfg.logger_level)

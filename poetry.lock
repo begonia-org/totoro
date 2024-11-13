@@ -4181,7 +4181,7 @@ sqlmodel = "^0.0.19"
 type = "git"
 url = "https://github.com/begonia-org/pydantic-protobuf.git"
 reference = "HEAD"
-resolved_reference = "2e927b865273cdcf2ea03464cc7559e721c79cf9"
+resolved_reference = "15084155bb646ad1bcbaa5c844fffa071adf0bf1"
 
 [[package]]
 name = "pyflakes"
