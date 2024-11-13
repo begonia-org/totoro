@@ -8,15 +8,15 @@
 '''
 
 
+from pydantic_protobuf.ext import pool, model2protobuf, protobuf2model, PydanticModel
+
 from pydantic import BaseModel
 
 from pydantic import Field as _Field
 
-from typing import Optional, List, Type
-
 from google.protobuf import message as _message
 
-from pydantic_protobuf.ext import pool, model2protobuf, PydanticModel, protobuf2model
+from typing import Optional, Type, List
 
 from google.protobuf import message_factory
 

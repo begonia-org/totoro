@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from . import services_pb2 as services__pb2
+from totoro.pb import services_pb2 as totoro_dot_pb_dot_services__pb2
 
 
 class RAGCoreServiceStub(object):
@@ -16,18 +16,18 @@ class RAGCoreServiceStub(object):
         """
         self.embedding = channel.unary_unary(
                 '/totoro.RAGCoreService/embedding',
-                request_serializer=services__pb2.EmbeddingRequest.SerializeToString,
-                response_deserializer=services__pb2.EmbeddingResponse.FromString,
+                request_serializer=totoro_dot_pb_dot_services__pb2.EmbeddingRequest.SerializeToString,
+                response_deserializer=totoro_dot_pb_dot_services__pb2.EmbeddingResponse.FromString,
                 )
         self.reanking = channel.unary_unary(
                 '/totoro.RAGCoreService/reanking',
-                request_serializer=services__pb2.ReankingRequest.SerializeToString,
-                response_deserializer=services__pb2.ReankingResponse.FromString,
+                request_serializer=totoro_dot_pb_dot_services__pb2.ReankingRequest.SerializeToString,
+                response_deserializer=totoro_dot_pb_dot_services__pb2.ReankingResponse.FromString,
                 )
         self.query = channel.unary_unary(
                 '/totoro.RAGCoreService/query',
-                request_serializer=services__pb2.QueryBuildRequest.SerializeToString,
-                response_deserializer=services__pb2.QueryBuildResponse.FromString,
+                request_serializer=totoro_dot_pb_dot_services__pb2.QueryBuildRequest.SerializeToString,
+                response_deserializer=totoro_dot_pb_dot_services__pb2.QueryBuildResponse.FromString,
                 )
 
 
@@ -57,18 +57,18 @@ def add_RAGCoreServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'embedding': grpc.unary_unary_rpc_method_handler(
                     servicer.embedding,
-                    request_deserializer=services__pb2.EmbeddingRequest.FromString,
-                    response_serializer=services__pb2.EmbeddingResponse.SerializeToString,
+                    request_deserializer=totoro_dot_pb_dot_services__pb2.EmbeddingRequest.FromString,
+                    response_serializer=totoro_dot_pb_dot_services__pb2.EmbeddingResponse.SerializeToString,
             ),
             'reanking': grpc.unary_unary_rpc_method_handler(
                     servicer.reanking,
-                    request_deserializer=services__pb2.ReankingRequest.FromString,
-                    response_serializer=services__pb2.ReankingResponse.SerializeToString,
+                    request_deserializer=totoro_dot_pb_dot_services__pb2.ReankingRequest.FromString,
+                    response_serializer=totoro_dot_pb_dot_services__pb2.ReankingResponse.SerializeToString,
             ),
             'query': grpc.unary_unary_rpc_method_handler(
                     servicer.query,
-                    request_deserializer=services__pb2.QueryBuildRequest.FromString,
-                    response_serializer=services__pb2.QueryBuildResponse.SerializeToString,
+                    request_deserializer=totoro_dot_pb_dot_services__pb2.QueryBuildRequest.FromString,
+                    response_serializer=totoro_dot_pb_dot_services__pb2.QueryBuildResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -92,8 +92,8 @@ class RAGCoreService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/embedding',
-            services__pb2.EmbeddingRequest.SerializeToString,
-            services__pb2.EmbeddingResponse.FromString,
+            totoro_dot_pb_dot_services__pb2.EmbeddingRequest.SerializeToString,
+            totoro_dot_pb_dot_services__pb2.EmbeddingResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -109,8 +109,8 @@ class RAGCoreService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/reanking',
-            services__pb2.ReankingRequest.SerializeToString,
-            services__pb2.ReankingResponse.FromString,
+            totoro_dot_pb_dot_services__pb2.ReankingRequest.SerializeToString,
+            totoro_dot_pb_dot_services__pb2.ReankingResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -126,7 +126,7 @@ class RAGCoreService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/query',
-            services__pb2.QueryBuildRequest.SerializeToString,
-            services__pb2.QueryBuildResponse.FromString,
+            totoro_dot_pb_dot_services__pb2.QueryBuildRequest.SerializeToString,
+            totoro_dot_pb_dot_services__pb2.QueryBuildResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
