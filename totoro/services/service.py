@@ -9,7 +9,7 @@ import tempfile
 import shutil
 import os
 from typing import IO
-
+from urllib.parse import urlparse
 import httpx
 from totoro.biz.core import RAGCore
 from totoro.infra.rdb import RDB
@@ -75,4 +75,6 @@ class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
         return file_key_or_url
 
     def __get_doc_title(self, file_key_or_url: str, doc_title: str):
+        if is_url(file_key_or_url):
+            file_key_or_url = urlparse(file_key_or_url).path
         return doc_title or os.path.basename(file_key_or_url)
