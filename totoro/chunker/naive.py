@@ -22,7 +22,7 @@ from totoro.parser import (DocxParser, ExcelParser, HtmlParser,
 from totoro.pb import doc_pb2
 from totoro.nlp.tokenizer import DocTokenizer
 from totoro.utils.encoder import ModelEncoder
-from totoro.utils.logger import logger
+from totoro.utils.logger import logger, task_logger
 from totoro.utils.utils import get_file_type, get_snowflake_id
 
 from .chunker import ChunkBuilder
@@ -42,7 +42,7 @@ class Pdf(PdfParser):
             to_page,
             callback
         )
-        print(f"self.boxes after __images__ is {len(self.boxes)} ")
+        # task_logger.info(f"self.boxes after __images__ is {len(self.boxes)} ")
         callback(msg="OCR finished")
         logger.info("OCR({}~{}): {}".format(
             from_page, to_page, timer() - start))
@@ -50,23 +50,29 @@ class Pdf(PdfParser):
         start = timer()
         logger.debug("start to layout analysis")
         self._layouts_rec(zoomin)
-        print(f"self.boxes after _layouts_rec is {len(self.boxes)} ")
+        task_logger.info(
+            f"self.boxes after _layouts_rec is {len(self.boxes)} ")
         logger.debug("layout analysis finished")
         callback(0.63, "Layout analysis finished.")
         self._table_transformer_job(zoomin)
-        print(f"self.boxes after _table_transformer_job is {len(self.boxes)} ")
+        task_logger.info(
+            f"self.boxes after _table_transformer_job is {len(self.boxes)} ")
         callback(0.65, "Table analysis finished.")
         self._text_merge()
-        print(f"self.boxes after _text_merge is {len(self.boxes)} ")
+        task_logger.info(f"self.boxes after _text_merge is {len(self.boxes)} ")
         callback(0.67, "Text merging finished")
         tbls = self._extract_table_figure(True, zoomin, True, True)
-        print(f"self.boxes after _extract_table_figure is {len(self.boxes)} ")
+        task_logger.info(
+            f"self.boxes after _extract_table_figure is {len(self.boxes)} ")
         # self._naive_vertical_merge()
-        print(f"self.boxes after _naive_vertical_merge is {len(self.boxes)} ")
+        task_logger.info(
+            f"self.boxes after _naive_vertical_merge is {len(self.boxes)} ")
         self._concat_downward()
-        print(f"self.boxes after _concat_downward is {len(self.boxes)} ")
+        task_logger.info(
+            f"self.boxes after _concat_downward is {len(self.boxes)} ")
         # self._filter_forpages()
-        print(f"self.boxes after _filter_forpages is {len(self.boxes)} ")
+        task_logger.info(
+            f"self.boxes after _filter_forpages is {len(self.boxes)} ")
 
         logger.info("layouts: {}".format(timer() - start))
         return [(b["text"], self._line_tag(b, zoomin))
@@ -121,7 +127,7 @@ class Docx(DocxParser):
 class NaiveChunkBuilder(ChunkBuilder):
     def __init__(self):
         super().__init__()
-        print("call NaiveChunkBuilder.__init__")
+        task_logger.info("call NaiveChunkBuilder.__init__")
         self.tokenizer = DocTokenizer()
         self.encoder = ModelEncoder()
 
