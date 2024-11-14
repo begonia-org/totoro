@@ -12,6 +12,7 @@ from typing import IO
 
 import httpx
 from totoro.biz.core import RAGCore
+from totoro.infra.rdb import RDB
 from totoro.pb import services_pb2, services_pb2_grpc, doc_pb2
 from totoro.models.constant_model import ChunkType
 from totoro.llm.embbeding.embedding import EmbeddingModel
@@ -20,8 +21,8 @@ from totoro.utils.utils import is_url
 
 
 class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
-    def __init__(self):
-        self.__core = RAGCore()
+    def __init__(self, rdb: RDB):
+        self.__core = RAGCore(rdb)
 
     def embedding(self, request: services_pb2.EmbeddingRequest, context) -> services_pb2.EmbeddingResponse:
         if not request.embedding or request.embedding.find("/") == -1:
