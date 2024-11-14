@@ -32,7 +32,7 @@ class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
         if not request.file_key_or_url:
             raise ValueError("No file key or url")
         factory = request.embedding.split("/")[0]
-        with tempfile.TemporaryFile() as tmp:
+        with tempfile.NamedTemporaryFile() as tmp:
             file = self.__get_file(tmp, request.file_key_or_url)
             if not isinstance(file, str):
                 file = file.name
