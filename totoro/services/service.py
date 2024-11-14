@@ -40,10 +40,11 @@ class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
                 request.file_key_or_url, request.doc_title)
             ret = self.__core.build_embedding(
                 file, doc_title, ChunkType.CHUNK_TYPE_NAIVE,
-                1, EmbeddingModel[factory](request.model_api_key, request.embedding))
+                request.task_id, EmbeddingModel[factory](request.model_api_key, request.embedding))
             items: doc_pb2.EmbededItem = []
             for doc, tk in ret:
-                items.append(doc_pb2.EmbededItem(doc.to_protobuf(), tk))
+                doc.file_key = request.file_key_or_url
+                items.append(doc_pb2.EmbededItem(doc=doc.to_protobuf(), tokens=tk))
             return services_pb2.EmbeddingResponse(items=items)
 
     def reanking(self, request: services_pb2.ReankingRequest, context):
