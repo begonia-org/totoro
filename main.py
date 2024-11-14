@@ -19,19 +19,24 @@ from totoro.models.doc_model import Doc
 from totoro.llm.embbeding.embedding import EmbeddingModel
 from totoro.utils import logger
 from totoro.config import init
+from totoro.config import TotoroConfigure as cfg
+from totoro.infra.rdb import RDB
 
 
 def main():
     init(os.path.dirname(__file__))
     logger.init()
-    embedding = RAGCore()
+    embedding = RAGCore(RDB(host=cfg().rdb_config.host, port=cfg(
+    ).rdb_config.port, password=cfg().rdb_config.password))
     data_dir = os.path.join(os.path.dirname(__file__), "tests", "data")
     logger.test_logger.debug(data_dir)
     file = os.path.join(data_dir, "test_zh.docx")
     ret = embedding.build_embedding(
-        file, "test_zh", ChunkType.CHUNK_TYPE_NAIVE, 1, EmbeddingModel["BAAI"]("", "BAAI/bge-large-zh-v1.5"))
+        file, "test_zh", ChunkType.CHUNK_TYPE_NAIVE, "12138", EmbeddingModel["BAAI"]("", "BAAI/bge-large-zh-v1.5"))
     docs = []
     chunks: List[Doc] = []
+    prog = embedding.get_prog("12138")
+    logger.test_logger.info(f"prog:{prog.message},{prog.progress}")
     index = faiss.IndexFlatL2(1024)
     for doc, tk in ret:
         # print(doc, tk)

@@ -4735,6 +4735,29 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "mirrors"
 
 [[package]]
+name = "redis"
+version = "5.2.0"
+description = "Python client for Redis database and key-value store"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "redis-5.2.0-py3-none-any.whl", hash = "sha256:ae174f2bb3b1bf2b09d54bf3e51fbc1469cf6c10aa03e21141f51969801a7897"},
+    {file = "redis-5.2.0.tar.gz", hash = "sha256:0b1087665a771b1ff2e003aa5bdd354f15a70c9e25d5a7dbf9c722c16528a7b0"},
+]
+
+[package.dependencies]
+async-timeout = {version = ">=4.0.3", markers = "python_full_version < \"3.11.3\""}
+
+[package.extras]
+hiredis = ["hiredis (>=3.0.0)"]
+ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==23.2.1)", "requests (>=2.31.0)"]
+
+[package.source]
+type = "legacy"
+url = "https://mirrors.aliyun.com/pypi/simple"
+reference = "mirrors"
+
+[[package]]
 name = "regex"
 version = "2024.9.11"
 description = "Alternative regular expression module, to replace re."
@@ -6496,4 +6519,4 @@ reference = "mirrors"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.13"
-content-hash = "60b6b39447da0f306c4a7e206e56e132e5191b896be75a71b7089204deb4adf5"
+content-hash = "4e3eb5fd8921e1586f822b38e0d54dd4c7124c19264c8498d6f9fbe6eb3509a3"
