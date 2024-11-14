@@ -19,7 +19,7 @@ from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18totoro/pb/services.proto\x12\x06totoro\x1a\x18totoro/pb/constant.proto\x1a\x13totoro/pb/doc.proto\x1a pydantic_protobuf/pydantic.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x90\x02\n\x10\x45mbeddingRequest\x12(\n\x0f\x66ile_key_or_url\x18\x01 \x01(\tR\x0f\x66ile_key_or_url\x12\x0c\n\x04lang\x18\x02 \x01(\t\x12\x31\n\nchunk_type\x18\x03 \x01(\x0e\x32\x11.totoro.ChunkTypeR\nchunk_type\x12:\n\rparser_config\x18\x05 \x01(\x0b\x32\x14.totoro.ParserConfigR\rparser_config\x12\x11\n\tembedding\x18\x06 \x01(\t\x12$\n\rmodel_api_key\x18\x07 \x01(\tR\rmodel_api_key\x12\x1c\n\tdoc_title\x18\x08 \x01(\tR\tdoc_title\"7\n\x11\x45mbeddingResponse\x12\"\n\x05items\x18\x01 \x03(\x0b\x32\x13.totoro.EmbededItem\"8\n\x0f\x43\x61ndidateTokens\x12\r\n\x05token\x18\x01 \x01(\t\x12\x16\n\x06\x64oc_id\x18\x02 \x01(\tR\x06\x64oc_id\"\xc0\x02\n\x0fReankingRequest\x12\r\n\x05query\x18\x01 \x01(\t\x12;\n\ncandidates\x18\x02 \x03(\x0b\x32\'.totoro.ReankingRequest.CandidatesEntry\x12\x0e\n\x06rerank\x18\x03 \x01(\t\x12$\n\rmodel_api_key\x18\x07 \x01(\tR\rmodel_api_key\x12:\n\x18keyword_simlarity_weight\x18\x04 \x01(\x01R\x18keyword_simlarity_weight\x12<\n\x19semantic_simlarity_weight\x18\x05 \x01(\x01R\x19semantic_simlarity_weight\x1a\x31\n\x0f\x43\x61ndidatesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xe6\x04\n\x10ReankingResponse\x12s\n\x19weighted_similarity_ranks\x18\x01 \x03(\x0b\x32\x35.totoro.ReankingResponse.WeightedSimilarityRanksEntryR\x19weighted_similarity_ranks\x12p\n\x18keyword_similarity_ranks\x18\x02 \x03(\x0b\x32\x34.totoro.ReankingResponse.KeywordSimilarityRanksEntryR\x18keyword_similarity_ranks\x12s\n\x19semantic_similarity_ranks\x18\x03 \x03(\x0b\x32\x35.totoro.ReankingResponse.SemanticSimilarityRanksEntryR\x19semantic_similarity_ranks\x1aQ\n\x1cWeightedSimilarityRanksEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.totoro.Smilarity:\x02\x38\x01\x1aP\n\x1bKeywordSimilarityRanksEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.totoro.Smilarity:\x02\x38\x01\x1aQ\n\x1cSemanticSimilarityRanksEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.totoro.Smilarity:\x02\x38\x01\"\x85\x01\n\x11QueryBuildRequest\x12\r\n\x05query\x18\x01 \x01(\t\x12\x0b\n\x03top\x18\x02 \x01(\x05\x12\x1b\n\x13simlarity_threshold\x18\x03 \x01(\x01\x12\x11\n\tembedding\x18\x06 \x01(\t\x12$\n\rmodel_api_key\x18\x07 \x01(\tR\rmodel_api_key\"=\n\x12QueryBuildResponse\x12\'\n\x06vector\x18\x01 \x01(\x0b\x32\x17.totoro.DocSearchVector2\xb2\x02\n\x0eRAGCoreService\x12\x62\n\tembedding\x12\x18.totoro.EmbeddingRequest\x1a\x19.totoro.EmbeddingResponse\" \x82\xd3\xe4\x93\x02\x1a\"\x15/api/v1/rag/embedding:\x01*\x12^\n\x08reanking\x12\x17.totoro.ReankingRequest\x1a\x18.totoro.ReankingResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x14/api/v1/rag/reanking:\x01*\x12\\\n\x05query\x12\x19.totoro.QueryBuildRequest\x1a\x1a.totoro.QueryBuildResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/api/v1/rag/query:\x01*b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18totoro/pb/services.proto\x12\x06totoro\x1a\x18totoro/pb/constant.proto\x1a\x13totoro/pb/doc.proto\x1a pydantic_protobuf/pydantic.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"\xaa\x02\n\x10\x45mbeddingRequest\x12(\n\x0f\x66ile_key_or_url\x18\x01 \x01(\tR\x0f\x66ile_key_or_url\x12\x0c\n\x04lang\x18\x02 \x01(\t\x12\x31\n\nchunk_type\x18\x03 \x01(\x0e\x32\x11.totoro.ChunkTypeR\nchunk_type\x12:\n\rparser_config\x18\x05 \x01(\x0b\x32\x14.totoro.ParserConfigR\rparser_config\x12\x11\n\tembedding\x18\x06 \x01(\t\x12$\n\rmodel_api_key\x18\x07 \x01(\tR\rmodel_api_key\x12\x1c\n\tdoc_title\x18\x08 \x01(\tR\tdoc_title\x12\x18\n\x07task_id\x18\t \x01(\tR\x07task_id\"7\n\x11\x45mbeddingResponse\x12\"\n\x05items\x18\x01 \x03(\x0b\x32\x13.totoro.EmbededItem\"4\n\x18\x45mbeddingProgressRequest\x12\x18\n\x07task_id\x18\x01 \x01(\tR\x07task_id\"8\n\x0f\x43\x61ndidateTokens\x12\r\n\x05token\x18\x01 \x01(\t\x12\x16\n\x06\x64oc_id\x18\x02 \x01(\tR\x06\x64oc_id\"\xc0\x02\n\x0fReankingRequest\x12\r\n\x05query\x18\x01 \x01(\t\x12;\n\ncandidates\x18\x02 \x03(\x0b\x32\'.totoro.ReankingRequest.CandidatesEntry\x12\x0e\n\x06rerank\x18\x03 \x01(\t\x12$\n\rmodel_api_key\x18\x07 \x01(\tR\rmodel_api_key\x12:\n\x18keyword_simlarity_weight\x18\x04 \x01(\x01R\x18keyword_simlarity_weight\x12<\n\x19semantic_simlarity_weight\x18\x05 \x01(\x01R\x19semantic_simlarity_weight\x1a\x31\n\x0f\x43\x61ndidatesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xe6\x04\n\x10ReankingResponse\x12s\n\x19weighted_similarity_ranks\x18\x01 \x03(\x0b\x32\x35.totoro.ReankingResponse.WeightedSimilarityRanksEntryR\x19weighted_similarity_ranks\x12p\n\x18keyword_similarity_ranks\x18\x02 \x03(\x0b\x32\x34.totoro.ReankingResponse.KeywordSimilarityRanksEntryR\x18keyword_similarity_ranks\x12s\n\x19semantic_similarity_ranks\x18\x03 \x03(\x0b\x32\x35.totoro.ReankingResponse.SemanticSimilarityRanksEntryR\x19semantic_similarity_ranks\x1aQ\n\x1cWeightedSimilarityRanksEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.totoro.Smilarity:\x02\x38\x01\x1aP\n\x1bKeywordSimilarityRanksEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.totoro.Smilarity:\x02\x38\x01\x1aQ\n\x1cSemanticSimilarityRanksEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.totoro.Smilarity:\x02\x38\x01\"\x85\x01\n\x11QueryBuildRequest\x12\r\n\x05query\x18\x01 \x01(\t\x12\x0b\n\x03top\x18\x02 \x01(\x05\x12\x1b\n\x13simlarity_threshold\x18\x03 \x01(\x01\x12\x11\n\tembedding\x18\x06 \x01(\t\x12$\n\rmodel_api_key\x18\x07 \x01(\tR\rmodel_api_key\"=\n\x12QueryBuildResponse\x12\'\n\x06vector\x18\x01 \x01(\x0b\x32\x17.totoro.DocSearchVector2\xaf\x03\n\x0eRAGCoreService\x12\x62\n\tembedding\x12\x18.totoro.EmbeddingRequest\x1a\x19.totoro.EmbeddingResponse\" \x82\xd3\xe4\x93\x02\x1a\"\x15/api/v1/rag/embedding:\x01*\x12^\n\x08reanking\x12\x17.totoro.ReankingRequest\x1a\x18.totoro.ReankingResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x14/api/v1/rag/reanking:\x01*\x12\\\n\x05query\x12\x19.totoro.QueryBuildRequest\x1a\x1a.totoro.QueryBuildResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/api/v1/rag/query:\x01*\x12{\n\x12\x65mbedding_progress\x12 .totoro.EmbeddingProgressRequest\x1a\x19.totoro.DocDegreeProgress\"(\x82\xd3\xe4\x93\x02\"\x12\x1d/api/v1/rag/embedding/progess:\x01*b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -40,28 +40,32 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_RAGCORESERVICE'].methods_by_name['reanking']._serialized_options = b'\202\323\344\223\002\031\"\024/api/v1/rag/reanking:\001*'
   _globals['_RAGCORESERVICE'].methods_by_name['query']._options = None
   _globals['_RAGCORESERVICE'].methods_by_name['query']._serialized_options = b'\202\323\344\223\002\026\"\021/api/v1/rag/query:\001*'
+  _globals['_RAGCORESERVICE'].methods_by_name['embedding_progress']._options = None
+  _globals['_RAGCORESERVICE'].methods_by_name['embedding_progress']._serialized_options = b'\202\323\344\223\002\"\022\035/api/v1/rag/embedding/progess:\001*'
   _globals['_EMBEDDINGREQUEST']._serialized_start=177
-  _globals['_EMBEDDINGREQUEST']._serialized_end=449
-  _globals['_EMBEDDINGRESPONSE']._serialized_start=451
-  _globals['_EMBEDDINGRESPONSE']._serialized_end=506
-  _globals['_CANDIDATETOKENS']._serialized_start=508
-  _globals['_CANDIDATETOKENS']._serialized_end=564
-  _globals['_REANKINGREQUEST']._serialized_start=567
-  _globals['_REANKINGREQUEST']._serialized_end=887
-  _globals['_REANKINGREQUEST_CANDIDATESENTRY']._serialized_start=838
-  _globals['_REANKINGREQUEST_CANDIDATESENTRY']._serialized_end=887
-  _globals['_REANKINGRESPONSE']._serialized_start=890
-  _globals['_REANKINGRESPONSE']._serialized_end=1504
-  _globals['_REANKINGRESPONSE_WEIGHTEDSIMILARITYRANKSENTRY']._serialized_start=1258
-  _globals['_REANKINGRESPONSE_WEIGHTEDSIMILARITYRANKSENTRY']._serialized_end=1339
-  _globals['_REANKINGRESPONSE_KEYWORDSIMILARITYRANKSENTRY']._serialized_start=1341
-  _globals['_REANKINGRESPONSE_KEYWORDSIMILARITYRANKSENTRY']._serialized_end=1421
-  _globals['_REANKINGRESPONSE_SEMANTICSIMILARITYRANKSENTRY']._serialized_start=1423
-  _globals['_REANKINGRESPONSE_SEMANTICSIMILARITYRANKSENTRY']._serialized_end=1504
-  _globals['_QUERYBUILDREQUEST']._serialized_start=1507
-  _globals['_QUERYBUILDREQUEST']._serialized_end=1640
-  _globals['_QUERYBUILDRESPONSE']._serialized_start=1642
-  _globals['_QUERYBUILDRESPONSE']._serialized_end=1703
-  _globals['_RAGCORESERVICE']._serialized_start=1706
-  _globals['_RAGCORESERVICE']._serialized_end=2012
+  _globals['_EMBEDDINGREQUEST']._serialized_end=475
+  _globals['_EMBEDDINGRESPONSE']._serialized_start=477
+  _globals['_EMBEDDINGRESPONSE']._serialized_end=532
+  _globals['_EMBEDDINGPROGRESSREQUEST']._serialized_start=534
+  _globals['_EMBEDDINGPROGRESSREQUEST']._serialized_end=586
+  _globals['_CANDIDATETOKENS']._serialized_start=588
+  _globals['_CANDIDATETOKENS']._serialized_end=644
+  _globals['_REANKINGREQUEST']._serialized_start=647
+  _globals['_REANKINGREQUEST']._serialized_end=967
+  _globals['_REANKINGREQUEST_CANDIDATESENTRY']._serialized_start=918
+  _globals['_REANKINGREQUEST_CANDIDATESENTRY']._serialized_end=967
+  _globals['_REANKINGRESPONSE']._serialized_start=970
+  _globals['_REANKINGRESPONSE']._serialized_end=1584
+  _globals['_REANKINGRESPONSE_WEIGHTEDSIMILARITYRANKSENTRY']._serialized_start=1338
+  _globals['_REANKINGRESPONSE_WEIGHTEDSIMILARITYRANKSENTRY']._serialized_end=1419
+  _globals['_REANKINGRESPONSE_KEYWORDSIMILARITYRANKSENTRY']._serialized_start=1421
+  _globals['_REANKINGRESPONSE_KEYWORDSIMILARITYRANKSENTRY']._serialized_end=1501
+  _globals['_REANKINGRESPONSE_SEMANTICSIMILARITYRANKSENTRY']._serialized_start=1503
+  _globals['_REANKINGRESPONSE_SEMANTICSIMILARITYRANKSENTRY']._serialized_end=1584
+  _globals['_QUERYBUILDREQUEST']._serialized_start=1587
+  _globals['_QUERYBUILDREQUEST']._serialized_end=1720
+  _globals['_QUERYBUILDRESPONSE']._serialized_start=1722
+  _globals['_QUERYBUILDRESPONSE']._serialized_end=1783
+  _globals['_RAGCORESERVICE']._serialized_start=1786
+  _globals['_RAGCORESERVICE']._serialized_end=2217
 # @@protoc_insertion_point(module_scope)

@@ -53,6 +53,9 @@ class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
                                      request.keyword_simlarity_weight,
                                      request.semantic_simlarity_weight)
 
+    def embedding_progress(self, request: services_pb2.EmbeddingProgressRequest, context) -> doc_pb2.DocDegreeProgress:
+        return self.__core.get_prog(request.task_id).to_protobuf()
+
     def query(self, request: services_pb2.QueryBuildRequest, context) -> services_pb2.QueryBuildResponse:
         factory = request.embedding.split("/")[0]
         return self.__core.build_query_vector(request.query,

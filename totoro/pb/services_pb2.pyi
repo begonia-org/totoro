@@ -11,7 +11,7 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class EmbeddingRequest(_message.Message):
-    __slots__ = ("file_key_or_url", "lang", "chunk_type", "parser_config", "embedding", "model_api_key", "doc_title")
+    __slots__ = ("file_key_or_url", "lang", "chunk_type", "parser_config", "embedding", "model_api_key", "doc_title", "task_id")
     FILE_KEY_OR_URL_FIELD_NUMBER: _ClassVar[int]
     LANG_FIELD_NUMBER: _ClassVar[int]
     CHUNK_TYPE_FIELD_NUMBER: _ClassVar[int]
@@ -19,6 +19,7 @@ class EmbeddingRequest(_message.Message):
     EMBEDDING_FIELD_NUMBER: _ClassVar[int]
     MODEL_API_KEY_FIELD_NUMBER: _ClassVar[int]
     DOC_TITLE_FIELD_NUMBER: _ClassVar[int]
+    TASK_ID_FIELD_NUMBER: _ClassVar[int]
     file_key_or_url: str
     lang: str
     chunk_type: _constant_pb2.ChunkType
@@ -26,13 +27,20 @@ class EmbeddingRequest(_message.Message):
     embedding: str
     model_api_key: str
     doc_title: str
-    def __init__(self, file_key_or_url: _Optional[str] = ..., lang: _Optional[str] = ..., chunk_type: _Optional[_Union[_constant_pb2.ChunkType, str]] = ..., parser_config: _Optional[_Union[_doc_pb2.ParserConfig, _Mapping]] = ..., embedding: _Optional[str] = ..., model_api_key: _Optional[str] = ..., doc_title: _Optional[str] = ...) -> None: ...
+    task_id: str
+    def __init__(self, file_key_or_url: _Optional[str] = ..., lang: _Optional[str] = ..., chunk_type: _Optional[_Union[_constant_pb2.ChunkType, str]] = ..., parser_config: _Optional[_Union[_doc_pb2.ParserConfig, _Mapping]] = ..., embedding: _Optional[str] = ..., model_api_key: _Optional[str] = ..., doc_title: _Optional[str] = ..., task_id: _Optional[str] = ...) -> None: ...
 
 class EmbeddingResponse(_message.Message):
     __slots__ = ("items",)
     ITEMS_FIELD_NUMBER: _ClassVar[int]
     items: _containers.RepeatedCompositeFieldContainer[_doc_pb2.EmbededItem]
     def __init__(self, items: _Optional[_Iterable[_Union[_doc_pb2.EmbededItem, _Mapping]]] = ...) -> None: ...
+
+class EmbeddingProgressRequest(_message.Message):
+    __slots__ = ("task_id",)
+    TASK_ID_FIELD_NUMBER: _ClassVar[int]
+    task_id: str
+    def __init__(self, task_id: _Optional[str] = ...) -> None: ...
 
 class CandidateTokens(_message.Message):
     __slots__ = ("token", "doc_id")

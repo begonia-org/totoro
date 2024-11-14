@@ -8,21 +8,21 @@
 '''
 
 
-from pydantic_protobuf.ext import pool, model2protobuf, protobuf2model, PydanticModel
-
-from typing import Optional, Type
+from typing import Type, Optional
 
 from pydantic import BaseModel
 
-from pydantic import Field as _Field
-
 from google.protobuf import message as _message
 
-from typing import Dict, Type, List, Optional, Any
-
-from typing import Optional, Type, List
-
 from google.protobuf import message_factory
+
+from pydantic_protobuf.ext import protobuf2model, pool, model2protobuf, PydanticModel
+
+from pydantic import Field as _Field
+
+from typing import Type, Optional, List
+
+from typing import Type, List, Any, Optional, Dict
 
 from .constant_model import ChunkType
 

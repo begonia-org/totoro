@@ -2,6 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
+from totoro.pb import doc_pb2 as totoro_dot_pb_dot_doc__pb2
 from totoro.pb import services_pb2 as totoro_dot_pb_dot_services__pb2
 
 
@@ -29,6 +30,11 @@ class RAGCoreServiceStub(object):
                 request_serializer=totoro_dot_pb_dot_services__pb2.QueryBuildRequest.SerializeToString,
                 response_deserializer=totoro_dot_pb_dot_services__pb2.QueryBuildResponse.FromString,
                 )
+        self.embedding_progress = channel.unary_unary(
+                '/totoro.RAGCoreService/embedding_progress',
+                request_serializer=totoro_dot_pb_dot_services__pb2.EmbeddingProgressRequest.SerializeToString,
+                response_deserializer=totoro_dot_pb_dot_doc__pb2.DocDegreeProgress.FromString,
+                )
 
 
 class RAGCoreServiceServicer(object):
@@ -52,6 +58,12 @@ class RAGCoreServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def embedding_progress(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_RAGCoreServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -69,6 +81,11 @@ def add_RAGCoreServiceServicer_to_server(servicer, server):
                     servicer.query,
                     request_deserializer=totoro_dot_pb_dot_services__pb2.QueryBuildRequest.FromString,
                     response_serializer=totoro_dot_pb_dot_services__pb2.QueryBuildResponse.SerializeToString,
+            ),
+            'embedding_progress': grpc.unary_unary_rpc_method_handler(
+                    servicer.embedding_progress,
+                    request_deserializer=totoro_dot_pb_dot_services__pb2.EmbeddingProgressRequest.FromString,
+                    response_serializer=totoro_dot_pb_dot_doc__pb2.DocDegreeProgress.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -128,5 +145,22 @@ class RAGCoreService(object):
         return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/query',
             totoro_dot_pb_dot_services__pb2.QueryBuildRequest.SerializeToString,
             totoro_dot_pb_dot_services__pb2.QueryBuildResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def embedding_progress(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/embedding_progress',
+            totoro_dot_pb_dot_services__pb2.EmbeddingProgressRequest.SerializeToString,
+            totoro_dot_pb_dot_doc__pb2.DocDegreeProgress.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

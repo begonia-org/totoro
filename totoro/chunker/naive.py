@@ -191,7 +191,7 @@ class NaiveChunkBuilder(ChunkBuilder):
             callback(0.1, "Start to parse.")
             sections, tbls = Docx()(filename, binary)
             res = self.tokenizer.tokenize_table(tbls, doc, eng)
-            callback(0.8, "Finish parsing.")
+            callback(1.00, "Finish parsing.")
         elif file_type == "pdf":
             pdf_parser = Pdf(
             ) if getattr(parser_config, "layout_recognize", True) else PlainParser()
@@ -227,19 +227,19 @@ class NaiveChunkBuilder(ChunkBuilder):
                     sections.append((sec[int(len(sec) / 2):], ""))
                 else:
                     sections.append((sec, ""))
-            callback(0.8, "Finish parsing.")
+            callback(1.00, "Finish parsing.")
         elif file_type == "html":
             callback(0.1, "Start to parse.")
             sections = HtmlParser()(filename, binary)
             sections = [(line, "") for line in sections if line]
-            callback(0.8, "Finish parsing.")
+            callback(1.00, "Finish parsing.")
         elif file_type == "doc" or re.search(r"\.doc$", filename, re.IGNORECASE):
             callback(0.1, "Start to parse.")
             binary = BytesIO(binary)
             doc_parsed = parser.from_buffer(binary)
             sections = doc_parsed['content'].split('\n')
             sections = [(line, "") for line in sections if line]
-            callback(0.8, "Finish parsing.")
+            callback(1.00, "Finish parsing.")
         else:
             raise NotImplementedError(
                 f"file type {file_type} not supported yet(pdf, xlsx, doc, docx, txt supported)")

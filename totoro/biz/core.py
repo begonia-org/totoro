@@ -19,17 +19,19 @@ from totoro.utils.utils import rm_space, rm_WWW, is_chinese, sub_special_char
 from totoro.models.doc_model import DocSearchVector
 from totoro.nlp.tokenizer import DocTokenizer
 from totoro.nlp import term_weight, synonym
+from totoro.infra.rdb import RDB
 from ..llm.rerank.rerank import BaseRerank
 from ..llm.embbeding.embedding import BaseEmbedding
 
 
 class RAGCore:
-    def __init__(self):
+    def __init__(self, rdb: RDB):
         self.title_regx = re.compile(
             r"</?(table|td|caption|tr|th)( [^<>]{0,12})?>")
         self.tokenizer = DocTokenizer()
         self.term_weight = term_weight.TermWeight()
         self.syn = synonym.Synonym()
+        self.rdb = rdb
 
     def chunk_file(
             self,
@@ -153,6 +155,8 @@ class RAGCore:
 
             # 使用 yield 返回处理后的文档对象，并附带 token 数量
             yield doc_model.Doc.from_protobuf(d), tk_count
+        # 通过回调函数报告处理进度
+        callback(prog=1.00, msg="ok")
 
     def build_embedding(
             self,
@@ -318,12 +322,15 @@ class RAGCore:
 
     def callback(self, tid):
         def call(prog=0.0, msg="ok"):
-            pass
-            # document_logger.debug(f"tid:{tid},progress:{prog},msg:{msg}")
-            # self.task_repo.add_task_progress(
-            #     tid, doc_model.DocDegreeProgress(message=msg, progress=prog))
-            # self.rdb.set(cfg().get_doc_task_key(fid, kib),
-            #              doc_model.DocDegreeProgress(message=msg, progress=prog).model_dump_json(),
-            #              ex=cfg().get_doc_task_key_expire())
+            self.rdb.set(f"totoro:v1:task:{tid}",
+                         doc_model.DocDegreeProgress(
+                             message=msg, progress=prog).model_dump_json(),
+                         ex=24 * 60 * 60)
 
         return call
+
+    def get_prog(self, tid) -> doc_model.DocDegreeProgress:
+        prog = self.rdb.get(f"totoro:v1:task:{tid}")
+        if prog:
+            return doc_model.DocDegreeProgress.model_validate_json(prog)
+        return doc_model.DocDegreeProgress(progress=0.0, message="no record")

@@ -75,6 +75,10 @@ class TotoroConfigure:
     def totoro_dir(self) -> str:
         return os.path.dirname(__file__)
 
+    @property
+    def rdb_config(self):
+        return self.settings.rdb
+
 
 # Usage example:
 # config = TotoroConfigure("/custom/project/root")

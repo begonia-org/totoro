@@ -8,31 +8,31 @@
 '''
 
 
-from pydantic_protobuf.ext import pool, model2protobuf, protobuf2model, PydanticModel
-
-from typing import Optional, Type
-
 from .doc_model import EmbededItem
+
+from .doc_model import ParserConfig
+
+from typing import Type, Optional
 
 from pydantic import BaseModel
 
 from .doc_model import DocSearchVector
 
-from pydantic import Field as _Field
-
 from google.protobuf import message as _message
 
-from typing import Dict, Type, List, Optional, Any
-
-from .doc_model import ParserConfig
-
-from typing import Optional, Type, List
+from typing import Type, Optional, List, Dict
 
 from google.protobuf import message_factory
 
-from .constant_model import ChunkType
+from pydantic_protobuf.ext import protobuf2model, pool, model2protobuf, PydanticModel
 
-from typing import Optional, Dict, Type, List
+from pydantic import Field as _Field
+
+from typing import Type, Optional, List
+
+from typing import Type, List, Any, Optional, Dict
+
+from .constant_model import ChunkType
 
 
 class EmbeddingRequest(BaseModel):
@@ -44,6 +44,7 @@ class EmbeddingRequest(BaseModel):
     embedding: Optional[str] = _Field()
     model_api_key: Optional[str] = _Field()
     doc_title: Optional[str] = _Field()
+    task_id: Optional[str] = _Field()
 
     def to_protobuf(self) -> _message.Message:
         _proto = pool.FindMessageTypeByName("totoro.EmbeddingRequest")
@@ -61,6 +62,20 @@ class EmbeddingResponse(BaseModel):
 
     def to_protobuf(self) -> _message.Message:
         _proto = pool.FindMessageTypeByName("totoro.EmbeddingResponse")
+        _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
+        return model2protobuf(self, _cls())
+
+    @classmethod
+    def from_protobuf(cls: Type[PydanticModel], src: _message.Message) -> PydanticModel:
+        return protobuf2model(cls, src)
+
+
+class EmbeddingProgressRequest(BaseModel):
+
+    task_id: Optional[str] = _Field()
+
+    def to_protobuf(self) -> _message.Message:
+        _proto = pool.FindMessageTypeByName("totoro.EmbeddingProgressRequest")
         _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
         return model2protobuf(self, _cls())
 
