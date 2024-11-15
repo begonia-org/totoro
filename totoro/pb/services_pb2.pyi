@@ -133,7 +133,9 @@ class PreQuestionRequest(_message.Message):
     def __init__(self, question: _Optional[str] = ...) -> None: ...
 
 class PreQuestionResponse(_message.Message):
-    __slots__ = ("term_weight_tokens",)
+    __slots__ = ("term_weight_tokens", "keywords")
     TERM_WEIGHT_TOKENS_FIELD_NUMBER: _ClassVar[int]
-    term_weight_tokens: _doc_pb2.TermWeightTokens
-    def __init__(self, term_weight_tokens: _Optional[_Union[_doc_pb2.TermWeightTokens, _Mapping]] = ...) -> None: ...
+    KEYWORDS_FIELD_NUMBER: _ClassVar[int]
+    term_weight_tokens: _containers.RepeatedCompositeFieldContainer[_doc_pb2.TermWeightTokens]
+    keywords: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, term_weight_tokens: _Optional[_Iterable[_Union[_doc_pb2.TermWeightTokens, _Mapping]]] = ..., keywords: _Optional[_Iterable[str]] = ...) -> None: ...
