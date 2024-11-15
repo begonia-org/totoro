@@ -9,6 +9,7 @@
 import io
 import re
 from typing import List, Iterable, Tuple
+from urllib.parse import unquote_plus
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity as CosineSimilarity
 from totoro.models import constant_model, doc_model
@@ -184,7 +185,7 @@ class RAGCore:
         Returns:
             Iterable[Tuple[doc_model.Doc, int]]: doc and token count
         """
-
+        filename = unquote_plus(filename)
         chunks = self.chunk_file(chunk_type, filename, doc_name,
                                  lang=lang, callback=self.callback(tid),
                                  parser_config=parser_config or doc_model.ParserConfig(
