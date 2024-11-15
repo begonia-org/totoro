@@ -8,31 +8,31 @@
 '''
 
 
-from .constant_model import ChunkType
-
 from pydantic import Field as _Field
-
-from pydantic_protobuf.ext import pool, PydanticModel, model2protobuf, protobuf2model
 
 from google.protobuf import message as _message
 
-from .doc_model import DocSearchVector
-
-from google.protobuf import message_factory
-
-from typing import Optional, Type, List, Dict, Any
+from pydantic_protobuf.ext import pool, protobuf2model, PydanticModel, model2protobuf
 
 from .doc_model import EmbededItem
-
-from .doc_model import ParserConfig
-
-from .doc_model import TermWeightTokens
 
 from typing import Optional, Type, Dict, List
 
 from pydantic import BaseModel
 
+from .doc_model import TermWeightTokens
+
+from typing import Optional, Dict, Type, List, Any
+
+from .constant_model import ChunkType
+
+from .doc_model import DocSearchVector
+
 from typing import Optional, Type, List
+
+from google.protobuf import message_factory
+
+from .doc_model import ParserConfig
 
 
 class EmbeddingRequest(BaseModel):
@@ -185,6 +185,7 @@ class PreQuestionResponse(BaseModel):
 
     term_weight_tokens: Optional[List[TermWeightTokens]] = _Field()
     keywords: Optional[List[str]] = _Field()
+    keyword_tokens: Optional[List[str]] = _Field()
 
     def to_protobuf(self) -> _message.Message:
         _proto = pool.FindMessageTypeByName("totoro.PreQuestionResponse")

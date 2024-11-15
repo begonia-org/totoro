@@ -145,4 +145,4 @@ class NLPHub:
                         token=t, weight=w) for t, w in twts]
                 )
             )
-        return term_weight_tokens, keywords
+        return term_weight_tokens, keywords, [self.__tokenizer.fine_grained_tokenize(keyword) for keyword in keywords]

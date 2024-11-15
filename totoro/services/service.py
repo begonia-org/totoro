@@ -68,8 +68,8 @@ class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
                                                                       request.embedding))
 
     def PreQuestion(self, request: services_pb2.PreQuestionRequest, context) -> services_pb2.PreQuestionResponse:
-        tokens, keywords = self.__nlp.pre_question(request.question)
-        return services_pb2.PreQuestionResponse(tokens=tokens, keywords=keywords)
+        tokens, keywords, keyword_tokens = self.__nlp.pre_question(request.question)
+        return services_pb2.PreQuestionResponse(tokens=tokens, keywords=keywords, keyword_tokens=keyword_tokens)
 
     def __get_file(self, tmp: IO, file_key_or_url: str):
         if is_url(file_key_or_url):
