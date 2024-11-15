@@ -52,13 +52,17 @@ class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
 
     def ReankingDoc(self, request: services_pb2.ReankingRequest, context):
         factory = request.rerank.split("/")[0]
-        return self.__core.reranking(request.query, request.candidates,
-                                     RerankModel[factory](
-                                         request.model_api_key, request.rerank),
-                                     request.keyword_simlarity_weight,
-                                     request.semantic_simlarity_weight)
+        tkweight, tksim, vtsim = self.__core.reranking(request.query, request.candidates,
+                                                       RerankModel[factory](
+                                                           request.model_api_key, request.rerank),
+                                                       request.keyword_simlarity_weight,
+                                                       request.semantic_simlarity_weight)
+        return services_pb2.ReankingResponse(weighted_similarity_ranks=tkweight,
+                                             keyword_similarity_ranks=tksim,
+                                             semantic_similarity_ranks=vtsim)
 
-    def ReadEmbeddingProgress(self, request: services_pb2.EmbeddingProgressRequest, context) -> doc_pb2.DocDegreeProgress:
+    def ReadEmbeddingProgress(self, request: services_pb2.EmbeddingProgressRequest, 
+                              context) -> doc_pb2.DocDegreeProgress:
         return self.__core.get_prog(request.task_id).to_protobuf()
 
     def BuildQuery(self, request: services_pb2.QueryBuildRequest, context) -> services_pb2.QueryBuildResponse:
@@ -68,7 +72,8 @@ class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
                                                                       request.embedding))
 
     def PreQuestion(self, request: services_pb2.PreQuestionRequest, context) -> services_pb2.PreQuestionResponse:
-        tokens, keywords, keyword_tokens = self.__nlp.pre_question(request.question)
+        tokens, keywords, keyword_tokens = self.__nlp.pre_question(
+            request.question)
         return services_pb2.PreQuestionResponse(tokens=tokens, keywords=keywords, keyword_tokens=keyword_tokens)
 
     def __get_file(self, tmp: IO, file_key_or_url: str):
