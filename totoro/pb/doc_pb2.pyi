@@ -267,7 +267,7 @@ class TokenWeight(_message.Message):
     def __init__(self, token: _Optional[str] = ..., weight: _Optional[float] = ...) -> None: ...
 
 class TermWeightTokens(_message.Message):
-    __slots__ = ("tokens", "weight", "synonyms_tokens", "sorted_weight_tokens", "isalnum", "synonyms", "token_weights", "is_chinese")
+    __slots__ = ("tokens", "weight", "synonyms_tokens", "sorted_weight_tokens", "isalnum", "synonyms", "token_weights", "is_chinese", "term_weight_spilt_str")
     TOKENS_FIELD_NUMBER: _ClassVar[int]
     WEIGHT_FIELD_NUMBER: _ClassVar[int]
     SYNONYMS_TOKENS_FIELD_NUMBER: _ClassVar[int]
@@ -276,6 +276,7 @@ class TermWeightTokens(_message.Message):
     SYNONYMS_FIELD_NUMBER: _ClassVar[int]
     TOKEN_WEIGHTS_FIELD_NUMBER: _ClassVar[int]
     IS_CHINESE_FIELD_NUMBER: _ClassVar[int]
+    TERM_WEIGHT_SPILT_STR_FIELD_NUMBER: _ClassVar[int]
     tokens: _containers.RepeatedScalarFieldContainer[str]
     weight: float
     synonyms_tokens: _containers.RepeatedScalarFieldContainer[str]
@@ -284,4 +285,5 @@ class TermWeightTokens(_message.Message):
     synonyms: _containers.RepeatedScalarFieldContainer[str]
     token_weights: _containers.RepeatedCompositeFieldContainer[TokenWeight]
     is_chinese: bool
-    def __init__(self, tokens: _Optional[_Iterable[str]] = ..., weight: _Optional[float] = ..., synonyms_tokens: _Optional[_Iterable[str]] = ..., sorted_weight_tokens: _Optional[_Iterable[_Union[TokenizerItem, _Mapping]]] = ..., isalnum: bool = ..., synonyms: _Optional[_Iterable[str]] = ..., token_weights: _Optional[_Iterable[_Union[TokenWeight, _Mapping]]] = ..., is_chinese: bool = ...) -> None: ...
+    term_weight_spilt_str: str
+    def __init__(self, tokens: _Optional[_Iterable[str]] = ..., weight: _Optional[float] = ..., synonyms_tokens: _Optional[_Iterable[str]] = ..., sorted_weight_tokens: _Optional[_Iterable[_Union[TokenizerItem, _Mapping]]] = ..., isalnum: bool = ..., synonyms: _Optional[_Iterable[str]] = ..., token_weights: _Optional[_Iterable[_Union[TokenWeight, _Mapping]]] = ..., is_chinese: bool = ..., term_weight_spilt_str: _Optional[str] = ...) -> None: ...

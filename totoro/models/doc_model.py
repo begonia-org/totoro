@@ -8,23 +8,23 @@
 '''
 
 
-from typing import List, Type, Optional
-
-from typing import Type, Optional
-
-from typing import List, Optional, Any, Dict, Type
-
-from pydantic_protobuf.ext import model2protobuf, pool, PydanticModel, protobuf2model
-
-from .constant_model import ChunkType
-
-from pydantic import Field as _Field
+from typing import Optional, Type
 
 from pydantic import BaseModel
 
-from google.protobuf import message as _message
-
 from google.protobuf import message_factory
+
+from typing import List, Optional, Type, Any, Dict
+
+from pydantic_protobuf.ext import model2protobuf, protobuf2model, pool, PydanticModel
+
+from pydantic import Field as _Field
+
+from .constant_model import ChunkType
+
+from typing import List, Optional, Type
+
+from google.protobuf import message as _message
 
 
 class Position(BaseModel):
@@ -324,6 +324,7 @@ class TermWeightTokens(BaseModel):
     synonyms: Optional[List[str]] = _Field()
     token_weights: Optional[List[TokenWeight]] = _Field()
     is_chinese: Optional[bool] = _Field()
+    term_weight_spilt_str: Optional[str] = _Field()
 
     def to_protobuf(self) -> _message.Message:
         _proto = pool.FindMessageTypeByName("totoro.TermWeightTokens")

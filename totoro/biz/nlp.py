@@ -140,6 +140,7 @@ class NLPHub:
                         self.tokenize(s)) for s in syns],
                     sorted_weight_tokens=sorted_token_items,
                     isalnum=isalnum,
+                    term_weight_spilt_str=tt,
                     token_weights=[doc_pb2.TokenWeight(
                         token=t, weight=w) for t, w in twts]
                 )

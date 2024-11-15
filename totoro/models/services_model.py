@@ -8,31 +8,31 @@
 '''
 
 
-from typing import List, Type, Optional
-
-from .doc_model import DocSearchVector
-
-from typing import List, Optional, Any, Dict, Type
-
-from .doc_model import ParserConfig
-
-from .doc_model import TermWeightTokens
-
-from pydantic_protobuf.ext import model2protobuf, pool, PydanticModel, protobuf2model
-
 from .doc_model import EmbededItem
-
-from .constant_model import ChunkType
-
-from pydantic import Field as _Field
 
 from pydantic import BaseModel
 
-from google.protobuf import message as _message
-
 from google.protobuf import message_factory
 
-from typing import List, Dict, Type, Optional
+from typing import List, Optional, Type, Dict
+
+from typing import List, Optional, Type, Any, Dict
+
+from pydantic_protobuf.ext import model2protobuf, protobuf2model, pool, PydanticModel
+
+from .doc_model import DocSearchVector
+
+from .doc_model import TermWeightTokens
+
+from pydantic import Field as _Field
+
+from .constant_model import ChunkType
+
+from .doc_model import ParserConfig
+
+from typing import List, Optional, Type
+
+from google.protobuf import message as _message
 
 
 class EmbeddingRequest(BaseModel):
