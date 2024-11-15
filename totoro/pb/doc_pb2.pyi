@@ -51,7 +51,7 @@ class DocTask(_message.Message):
     def __init__(self, file_id: _Optional[str] = ..., lang: _Optional[str] = ..., llm_id: _Optional[str] = ..., kb_id: _Optional[str] = ..., chunk_type: _Optional[_Union[_constant_pb2.ChunkType, str]] = ...) -> None: ...
 
 class Doc(_message.Message):
-    __slots__ = ("doc_id", "doc_name_keyword", "title_tokens", "title_small_tokens", "page_num", "positions", "top", "content_with_weight", "content_tokens", "content_small_tokens", "image_uri", "q_vec", "q_vec_size", "image", "file_key")
+    __slots__ = ("doc_id", "doc_name_keyword", "title_tokens", "title_small_tokens", "page_num", "positions", "top", "content_with_weight", "content_tokens", "content_small_tokens", "image_uri", "q_vec", "q_vec_size", "image", "important_keywords", "important_keywords_tokens", "file_key", "file_md5")
     DOC_ID_FIELD_NUMBER: _ClassVar[int]
     DOC_NAME_KEYWORD_FIELD_NUMBER: _ClassVar[int]
     TITLE_TOKENS_FIELD_NUMBER: _ClassVar[int]
@@ -66,7 +66,10 @@ class Doc(_message.Message):
     Q_VEC_FIELD_NUMBER: _ClassVar[int]
     Q_VEC_SIZE_FIELD_NUMBER: _ClassVar[int]
     IMAGE_FIELD_NUMBER: _ClassVar[int]
+    IMPORTANT_KEYWORDS_FIELD_NUMBER: _ClassVar[int]
+    IMPORTANT_KEYWORDS_TOKENS_FIELD_NUMBER: _ClassVar[int]
     FILE_KEY_FIELD_NUMBER: _ClassVar[int]
+    FILE_MD5_FIELD_NUMBER: _ClassVar[int]
     doc_id: str
     doc_name_keyword: str
     title_tokens: str
@@ -81,8 +84,11 @@ class Doc(_message.Message):
     q_vec: _containers.RepeatedScalarFieldContainer[float]
     q_vec_size: int
     image: str
+    important_keywords: _containers.RepeatedScalarFieldContainer[str]
+    important_keywords_tokens: str
     file_key: str
-    def __init__(self, doc_id: _Optional[str] = ..., doc_name_keyword: _Optional[str] = ..., title_tokens: _Optional[str] = ..., title_small_tokens: _Optional[str] = ..., page_num: _Optional[_Iterable[int]] = ..., positions: _Optional[_Iterable[_Union[Position, _Mapping]]] = ..., top: _Optional[_Iterable[int]] = ..., content_with_weight: _Optional[str] = ..., content_tokens: _Optional[str] = ..., content_small_tokens: _Optional[str] = ..., image_uri: _Optional[str] = ..., q_vec: _Optional[_Iterable[float]] = ..., q_vec_size: _Optional[int] = ..., image: _Optional[str] = ..., file_key: _Optional[str] = ...) -> None: ...
+    file_md5: str
+    def __init__(self, doc_id: _Optional[str] = ..., doc_name_keyword: _Optional[str] = ..., title_tokens: _Optional[str] = ..., title_small_tokens: _Optional[str] = ..., page_num: _Optional[_Iterable[int]] = ..., positions: _Optional[_Iterable[_Union[Position, _Mapping]]] = ..., top: _Optional[_Iterable[int]] = ..., content_with_weight: _Optional[str] = ..., content_tokens: _Optional[str] = ..., content_small_tokens: _Optional[str] = ..., image_uri: _Optional[str] = ..., q_vec: _Optional[_Iterable[float]] = ..., q_vec_size: _Optional[int] = ..., image: _Optional[str] = ..., important_keywords: _Optional[_Iterable[str]] = ..., important_keywords_tokens: _Optional[str] = ..., file_key: _Optional[str] = ..., file_md5: _Optional[str] = ...) -> None: ...
 
 class Smilarity(_message.Message):
     __slots__ = ("simlarity",)

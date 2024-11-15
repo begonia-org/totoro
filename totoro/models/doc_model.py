@@ -8,23 +8,23 @@
 '''
 
 
-from typing import Type, Optional
-
-from pydantic import BaseModel
+from google.protobuf import message_factory
 
 from google.protobuf import message as _message
 
-from google.protobuf import message_factory
-
-from pydantic_protobuf.ext import protobuf2model, pool, model2protobuf, PydanticModel
-
 from pydantic import Field as _Field
 
-from typing import Type, Optional, List
+from typing import Optional, Type
 
-from typing import Type, List, Any, Optional, Dict
+from typing import Type, Dict, Any, Optional, List
 
 from .constant_model import ChunkType
+
+from pydantic import BaseModel
+
+from pydantic_protobuf.ext import pool, protobuf2model, PydanticModel, model2protobuf
+
+from typing import Optional, List, Type
 
 
 class Position(BaseModel):
@@ -97,7 +97,10 @@ class Doc(BaseModel):
     q_vec: Optional[List[float]] = _Field()
     q_vec_size: Optional[int] = _Field()
     image: Optional[str] = _Field()
+    important_keywords: Optional[List[str]] = _Field()
+    important_keywords_tokens: Optional[str] = _Field()
     file_key: Optional[str] = _Field()
+    file_md5: Optional[str] = _Field()
 
     def to_protobuf(self) -> _message.Message:
         _proto = pool.FindMessageTypeByName("totoro.Doc")

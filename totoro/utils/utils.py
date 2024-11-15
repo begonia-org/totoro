@@ -11,6 +11,7 @@ import io
 import re
 import time
 import uuid
+import hashlib
 
 import magic
 from snowflake import SnowflakeGenerator
@@ -190,3 +191,16 @@ def is_url(path):
 
 def get_now_datetime():
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def get_file_md5(file):
+    md5 = hashlib.md5()
+
+    if isinstance(file, str):
+        with open(file, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                md5.update(chunk)
+    else:
+        for chunk in iter(lambda: file.read(4096), b""):
+            md5.update(chunk)
+    return md5.hexdigest()

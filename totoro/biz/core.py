@@ -16,7 +16,7 @@ from totoro.models import constant_model, doc_model
 from totoro.pb import doc_pb2
 
 from totoro.chunker import CHUNK_BUILDERS
-from totoro.utils.utils import rm_space, rm_WWW, is_chinese, sub_special_char
+from totoro.utils.utils import rm_space, rm_WWW, is_chinese, sub_special_char, get_file_md5
 from totoro.models.doc_model import DocSearchVector
 from totoro.nlp.tokenizer import DocTokenizer
 from totoro.nlp import term_weight, synonym
@@ -74,6 +74,7 @@ class RAGCore:
 
         # 初始化一个计数器，用于计算总的 token 数量
         tk_count = 0
+        
         # print(f"tts:{tts},cnts:{cnts}")
         # 如果标题和内容的数量相等，才继续处理
         if len(tts) == len(cnts):
@@ -153,7 +154,7 @@ class RAGCore:
                 getattr(d, "positions").extend([])
                 getattr(d, "top").extend([])
                 getattr(d, "page_num").extend([])
-
+            d.important_keywords_tokens = self.tokenizer.tokenize(" ".join(d.important_keywords))
             # 使用 yield 返回处理后的文档对象，并附带 token 数量
             yield doc_model.Doc.from_protobuf(d), tk_count
         # 通过回调函数报告处理进度
@@ -163,6 +164,7 @@ class RAGCore:
             self,
             filename: str,
             doc_name: str,
+            important_keywords: List[str],
             chunk_type: constant_model.ChunkType,
             tid: str,
             embed: BaseEmbedding,
@@ -186,10 +188,15 @@ class RAGCore:
             Iterable[Tuple[doc_model.Doc, int]]: doc and token count
         """
         filename = unquote_plus(filename)
+        doc_name = unquote_plus(doc_name)
         chunks = self.chunk_file(chunk_type, filename, doc_name,
                                  lang=lang, callback=self.callback(tid),
                                  parser_config=parser_config or doc_model.ParserConfig(
                                      filename_embd_weight=0.1, task_page_size=12))
+        file_md5 = get_file_md5(filename)
+        for c in chunks:
+            c.file_md5 = file_md5
+            c.important_keywords.extend(important_keywords)
         return self.embedding(chunks, embed, parser_config or doc_model.ParserConfig(
             filename_embd_weight=0.1, task_page_size=12), self.callback(tid))
 

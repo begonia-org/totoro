@@ -8,31 +8,29 @@
 '''
 
 
-from .doc_model import EmbededItem
+from google.protobuf import message_factory
 
 from .doc_model import ParserConfig
 
-from typing import Type, Optional
-
-from pydantic import BaseModel
-
-from .doc_model import DocSearchVector
-
 from google.protobuf import message as _message
-
-from typing import Type, Optional, List, Dict
-
-from google.protobuf import message_factory
-
-from pydantic_protobuf.ext import protobuf2model, pool, model2protobuf, PydanticModel
 
 from pydantic import Field as _Field
 
-from typing import Type, Optional, List
+from .doc_model import EmbededItem
 
-from typing import Type, List, Any, Optional, Dict
+from typing import Type, Dict, Any, Optional, List
 
 from .constant_model import ChunkType
+
+from pydantic import BaseModel
+
+from pydantic_protobuf.ext import pool, protobuf2model, PydanticModel, model2protobuf
+
+from typing import Dict, Optional, List, Type
+
+from typing import Optional, List, Type
+
+from .doc_model import DocSearchVector
 
 
 class EmbeddingRequest(BaseModel):
@@ -45,6 +43,7 @@ class EmbeddingRequest(BaseModel):
     model_api_key: Optional[str] = _Field()
     doc_title: Optional[str] = _Field()
     task_id: Optional[str] = _Field()
+    important_keywords: Optional[List[str]] = _Field()
 
     def to_protobuf(self) -> _message.Message:
         _proto = pool.FindMessageTypeByName("totoro.EmbeddingRequest")

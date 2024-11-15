@@ -32,7 +32,7 @@ def main():
     logger.test_logger.debug(data_dir)
     file = os.path.join(data_dir, "test_zh.docx")
     ret = embedding.build_embedding(
-        file, "test_zh", ChunkType.CHUNK_TYPE_NAIVE, "12138", EmbeddingModel["BAAI"]("", "BAAI/bge-large-zh-v1.5"))
+        file, "test_zh", ["全国人大常委会", "科学技术普及"], ChunkType.CHUNK_TYPE_NAIVE, "12138", EmbeddingModel["BAAI"]("", "BAAI/bge-large-zh-v1.5"))
     docs = []
     chunks: List[Doc] = []
     prog = embedding.get_prog("12138")
@@ -51,7 +51,7 @@ def main():
         json.dump(docs, f, ensure_ascii=False, indent=4)
     file = os.path.join(data_dir, "中国国际航空航天博览会.pdf")
     ret = embedding.build_embedding(
-        file, "中国国际航空航天博览会", ChunkType.CHUNK_TYPE_NAIVE, 1, EmbeddingModel["BAAI"]("", "BAAI/bge-large-zh-v1.5"))
+        file, "中国国际航空航天博览会", ["珠海", "珠海航展", "航展"], ChunkType.CHUNK_TYPE_NAIVE, 1, EmbeddingModel["BAAI"]("", "BAAI/bge-large-zh-v1.5"))
     docs = []
     # index = faiss.IndexFlatL2(1024)
     for doc, _ in ret:

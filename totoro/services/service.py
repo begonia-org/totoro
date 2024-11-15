@@ -39,7 +39,7 @@ class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
             doc_title = self.__get_doc_title(
                 request.file_key_or_url, request.doc_title)
             ret = self.__core.build_embedding(
-                file, doc_title, ChunkType.CHUNK_TYPE_NAIVE,
+                file, doc_title, request.important_keywords, ChunkType.CHUNK_TYPE_NAIVE,
                 request.task_id, EmbeddingModel[factory](request.model_api_key, request.embedding))
             items: doc_pb2.EmbededItem = []
             for doc, tk in ret:
