@@ -245,3 +245,43 @@ class DocSearchVector(_message.Message):
     num_candidates: int
     query_vector: _containers.RepeatedScalarFieldContainer[float]
     def __init__(self, q_vec_size: _Optional[int] = ..., top_k: _Optional[int] = ..., similarity: _Optional[float] = ..., num_candidates: _Optional[int] = ..., query_vector: _Optional[_Iterable[float]] = ...) -> None: ...
+
+class TokenizerItem(_message.Message):
+    __slots__ = ("token", "synonyms", "weight", "fine_grained_tokens")
+    TOKEN_FIELD_NUMBER: _ClassVar[int]
+    SYNONYMS_FIELD_NUMBER: _ClassVar[int]
+    WEIGHT_FIELD_NUMBER: _ClassVar[int]
+    FINE_GRAINED_TOKENS_FIELD_NUMBER: _ClassVar[int]
+    token: str
+    synonyms: _containers.RepeatedScalarFieldContainer[str]
+    weight: float
+    fine_grained_tokens: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, token: _Optional[str] = ..., synonyms: _Optional[_Iterable[str]] = ..., weight: _Optional[float] = ..., fine_grained_tokens: _Optional[_Iterable[str]] = ...) -> None: ...
+
+class TokenWeight(_message.Message):
+    __slots__ = ("token", "weight")
+    TOKEN_FIELD_NUMBER: _ClassVar[int]
+    WEIGHT_FIELD_NUMBER: _ClassVar[int]
+    token: str
+    weight: float
+    def __init__(self, token: _Optional[str] = ..., weight: _Optional[float] = ...) -> None: ...
+
+class TermWeightTokens(_message.Message):
+    __slots__ = ("tokens", "weight", "synonyms_tokens", "sorted_weight_tokens", "isalnum", "synonyms", "token_weights", "is_chinese")
+    TOKENS_FIELD_NUMBER: _ClassVar[int]
+    WEIGHT_FIELD_NUMBER: _ClassVar[int]
+    SYNONYMS_TOKENS_FIELD_NUMBER: _ClassVar[int]
+    SORTED_WEIGHT_TOKENS_FIELD_NUMBER: _ClassVar[int]
+    ISALNUM_FIELD_NUMBER: _ClassVar[int]
+    SYNONYMS_FIELD_NUMBER: _ClassVar[int]
+    TOKEN_WEIGHTS_FIELD_NUMBER: _ClassVar[int]
+    IS_CHINESE_FIELD_NUMBER: _ClassVar[int]
+    tokens: _containers.RepeatedScalarFieldContainer[str]
+    weight: float
+    synonyms_tokens: _containers.RepeatedScalarFieldContainer[str]
+    sorted_weight_tokens: _containers.RepeatedCompositeFieldContainer[TokenizerItem]
+    isalnum: bool
+    synonyms: _containers.RepeatedScalarFieldContainer[str]
+    token_weights: _containers.RepeatedCompositeFieldContainer[TokenWeight]
+    is_chinese: bool
+    def __init__(self, tokens: _Optional[_Iterable[str]] = ..., weight: _Optional[float] = ..., synonyms_tokens: _Optional[_Iterable[str]] = ..., sorted_weight_tokens: _Optional[_Iterable[_Union[TokenizerItem, _Mapping]]] = ..., isalnum: bool = ..., synonyms: _Optional[_Iterable[str]] = ..., token_weights: _Optional[_Iterable[_Union[TokenWeight, _Mapping]]] = ..., is_chinese: bool = ...) -> None: ...

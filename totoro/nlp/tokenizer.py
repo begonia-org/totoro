@@ -429,10 +429,11 @@ class DocTokenizer(object):
         return self.merge_(res)
 
     def fine_grained_tokenize(self, tks):
-        """预处理和中文比例判断。
-基于长度和正则表达式的初步过滤。
-通过深度优先搜索进行细粒度分词，并选择最优分词结果。
-进行英文规范化处理并返回最终结果。
+        """
+        预处理和中文比例判断。
+        基于长度和正则表达式的初步过滤。
+        通过深度优先搜索进行细粒度分词，并选择最优分词结果。
+        进行英文规范化处理并返回最终结果。
 
         Args:
             tks (_type_): _description_

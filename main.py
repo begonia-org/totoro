@@ -14,6 +14,7 @@ import faiss
 import numpy as np
 
 from totoro.biz.core import RAGCore
+from totoro.biz.nlp import NLPHub
 from totoro.models.constant_model import ChunkType
 from totoro.models.doc_model import Doc
 from totoro.llm.embbeding.embedding import EmbeddingModel
@@ -21,6 +22,13 @@ from totoro.utils import logger
 from totoro.config import init
 from totoro.config import TotoroConfigure as cfg
 from totoro.infra.rdb import RDB
+
+
+def question():
+    nlp = NLPHub()
+    question = "科学技术普及法修订草案的目标是什么？"
+    tokens = nlp.pre_question(question)
+    return tokens
 
 
 def main():
@@ -45,8 +53,8 @@ def main():
         faiss_vector = np.array(doc.q_vec, dtype=np.float32)
         index.add(faiss_vector.reshape(1, -1))
         # 转换为 np.float32 类型
-
-        # test_logger.debug(doc, tk)
+    question()
+    # test_logger.debug(doc, tk)
     with open("embedding_zh.json", "w", encoding="utf-8") as f:
         json.dump(docs, f, ensure_ascii=False, indent=4)
     file = os.path.join(data_dir, "中国国际航空航天博览会.pdf")

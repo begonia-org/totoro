@@ -8,23 +8,23 @@
 '''
 
 
-from google.protobuf import message_factory
+from pydantic import BaseModel
 
-from google.protobuf import message as _message
+from typing import Optional, Type, List, Any, Dict
+
+from typing import List, Optional, Type
 
 from pydantic import Field as _Field
 
 from typing import Optional, Type
 
-from typing import Type, Dict, Any, Optional, List
+from pydantic_protobuf.ext import model2protobuf, pool, PydanticModel, protobuf2model
+
+from google.protobuf import message_factory
+
+from google.protobuf import message as _message
 
 from .constant_model import ChunkType
-
-from pydantic import BaseModel
-
-from pydantic_protobuf.ext import pool, protobuf2model, PydanticModel, model2protobuf
-
-from typing import Optional, List, Type
 
 
 class Position(BaseModel):
@@ -274,6 +274,59 @@ class DocSearchVector(BaseModel):
 
     def to_protobuf(self) -> _message.Message:
         _proto = pool.FindMessageTypeByName("totoro.DocSearchVector")
+        _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
+        return model2protobuf(self, _cls())
+
+    @classmethod
+    def from_protobuf(cls: Type[PydanticModel], src: _message.Message) -> PydanticModel:
+        return protobuf2model(cls, src)
+
+
+class TokenizerItem(BaseModel):
+
+    token: Optional[str] = _Field()
+    synonyms: Optional[List[str]] = _Field()
+    weight: Optional[float] = _Field()
+    fine_grained_tokens: Optional[List[str]] = _Field()
+
+    def to_protobuf(self) -> _message.Message:
+        _proto = pool.FindMessageTypeByName("totoro.TokenizerItem")
+        _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
+        return model2protobuf(self, _cls())
+
+    @classmethod
+    def from_protobuf(cls: Type[PydanticModel], src: _message.Message) -> PydanticModel:
+        return protobuf2model(cls, src)
+
+
+class TokenWeight(BaseModel):
+
+    token: Optional[str] = _Field()
+    weight: Optional[float] = _Field()
+
+    def to_protobuf(self) -> _message.Message:
+        _proto = pool.FindMessageTypeByName("totoro.TokenWeight")
+        _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
+        return model2protobuf(self, _cls())
+
+    @classmethod
+    def from_protobuf(cls: Type[PydanticModel], src: _message.Message) -> PydanticModel:
+        return protobuf2model(cls, src)
+
+
+class TermWeightTokens(BaseModel):
+
+    tokens: Optional[List[str]] = _Field()
+    weight: Optional[float] = _Field()
+    synonyms_tokens: Optional[List[str]] = _Field()
+    sorted_weight_tokens: Optional[List[TokenizerItem]] = _Field()
+    isalnum: Optional[bool] = _Field()
+    synonyms: Optional[List[str]] = _Field()
+    token_weights: Optional[List[TokenWeight]] = _Field()
+    is_chinese: Optional[bool] = _Field()
+
+    def to_protobuf(self) -> _message.Message:
+        _proto = pool.FindMessageTypeByName("totoro.TermWeightTokens")
         _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
         return model2protobuf(self, _cls())
 
