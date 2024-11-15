@@ -125,3 +125,15 @@ class QueryBuildResponse(_message.Message):
     VECTOR_FIELD_NUMBER: _ClassVar[int]
     vector: _doc_pb2.DocSearchVector
     def __init__(self, vector: _Optional[_Union[_doc_pb2.DocSearchVector, _Mapping]] = ...) -> None: ...
+
+class PreQuestionRequest(_message.Message):
+    __slots__ = ("question",)
+    QUESTION_FIELD_NUMBER: _ClassVar[int]
+    question: str
+    def __init__(self, question: _Optional[str] = ...) -> None: ...
+
+class PreQuestionResponse(_message.Message):
+    __slots__ = ("term_weight_tokens",)
+    TERM_WEIGHT_TOKENS_FIELD_NUMBER: _ClassVar[int]
+    term_weight_tokens: _doc_pb2.TermWeightTokens
+    def __init__(self, term_weight_tokens: _Optional[_Union[_doc_pb2.TermWeightTokens, _Mapping]] = ...) -> None: ...

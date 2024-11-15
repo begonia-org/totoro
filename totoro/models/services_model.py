@@ -8,29 +8,31 @@
 '''
 
 
-from pydantic import BaseModel
-
-from typing import List, Optional, Type
-
-from pydantic import Field as _Field
-
-from .doc_model import EmbededItem
-
-from typing import Dict, List, Optional, Type
-
-from .doc_model import ParserConfig
+from typing import List, Type, Optional
 
 from .doc_model import DocSearchVector
 
+from typing import List, Optional, Any, Dict, Type
+
+from .doc_model import ParserConfig
+
+from .doc_model import TermWeightTokens
+
 from pydantic_protobuf.ext import model2protobuf, pool, PydanticModel, protobuf2model
 
-from google.protobuf import message_factory
+from .doc_model import EmbededItem
+
+from .constant_model import ChunkType
+
+from pydantic import Field as _Field
+
+from pydantic import BaseModel
 
 from google.protobuf import message as _message
 
-from typing import Dict, Optional, Type, List, Any
+from google.protobuf import message_factory
 
-from .constant_model import ChunkType
+from typing import List, Dict, Type, Optional
 
 
 class EmbeddingRequest(BaseModel):
@@ -157,6 +159,34 @@ class QueryBuildResponse(BaseModel):
 
     def to_protobuf(self) -> _message.Message:
         _proto = pool.FindMessageTypeByName("totoro.QueryBuildResponse")
+        _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
+        return model2protobuf(self, _cls())
+
+    @classmethod
+    def from_protobuf(cls: Type[PydanticModel], src: _message.Message) -> PydanticModel:
+        return protobuf2model(cls, src)
+
+
+class PreQuestionRequest(BaseModel):
+
+    question: Optional[str] = _Field()
+
+    def to_protobuf(self) -> _message.Message:
+        _proto = pool.FindMessageTypeByName("totoro.PreQuestionRequest")
+        _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
+        return model2protobuf(self, _cls())
+
+    @classmethod
+    def from_protobuf(cls: Type[PydanticModel], src: _message.Message) -> PydanticModel:
+        return protobuf2model(cls, src)
+
+
+class PreQuestionResponse(BaseModel):
+
+    term_weight_tokens: Optional[TermWeightTokens] = _Field()
+
+    def to_protobuf(self) -> _message.Message:
+        _proto = pool.FindMessageTypeByName("totoro.PreQuestionResponse")
         _cls: Type[_message.Message] = message_factory.GetMessageClass(_proto)
         return model2protobuf(self, _cls())
 

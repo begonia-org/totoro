@@ -8,23 +8,23 @@
 '''
 
 
-from pydantic import BaseModel
+from typing import List, Type, Optional
 
-from typing import Optional, Type, List, Any, Dict
+from typing import Type, Optional
 
-from typing import List, Optional, Type
-
-from pydantic import Field as _Field
-
-from typing import Optional, Type
+from typing import List, Optional, Any, Dict, Type
 
 from pydantic_protobuf.ext import model2protobuf, pool, PydanticModel, protobuf2model
 
-from google.protobuf import message_factory
+from .constant_model import ChunkType
+
+from pydantic import Field as _Field
+
+from pydantic import BaseModel
 
 from google.protobuf import message as _message
 
-from .constant_model import ChunkType
+from google.protobuf import message_factory
 
 
 class Position(BaseModel):

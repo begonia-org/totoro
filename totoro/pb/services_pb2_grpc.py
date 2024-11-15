@@ -15,50 +15,61 @@ class RAGCoreServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.embedding = channel.unary_unary(
-                '/totoro.RAGCoreService/embedding',
+        self.EmbeddingDoc = channel.unary_unary(
+                '/totoro.RAGCoreService/EmbeddingDoc',
                 request_serializer=totoro_dot_pb_dot_services__pb2.EmbeddingRequest.SerializeToString,
                 response_deserializer=totoro_dot_pb_dot_services__pb2.EmbeddingResponse.FromString,
                 )
-        self.reanking = channel.unary_unary(
-                '/totoro.RAGCoreService/reanking',
+        self.ReankingDoc = channel.unary_unary(
+                '/totoro.RAGCoreService/ReankingDoc',
                 request_serializer=totoro_dot_pb_dot_services__pb2.ReankingRequest.SerializeToString,
                 response_deserializer=totoro_dot_pb_dot_services__pb2.ReankingResponse.FromString,
                 )
-        self.query = channel.unary_unary(
-                '/totoro.RAGCoreService/query',
+        self.BuildQuery = channel.unary_unary(
+                '/totoro.RAGCoreService/BuildQuery',
                 request_serializer=totoro_dot_pb_dot_services__pb2.QueryBuildRequest.SerializeToString,
                 response_deserializer=totoro_dot_pb_dot_services__pb2.QueryBuildResponse.FromString,
                 )
-        self.embedding_progress = channel.unary_unary(
-                '/totoro.RAGCoreService/embedding_progress',
+        self.ReadEmbeddingProgress = channel.unary_unary(
+                '/totoro.RAGCoreService/ReadEmbeddingProgress',
                 request_serializer=totoro_dot_pb_dot_services__pb2.EmbeddingProgressRequest.SerializeToString,
                 response_deserializer=totoro_dot_pb_dot_doc__pb2.DocDegreeProgress.FromString,
+                )
+        self.PreQuestion = channel.unary_unary(
+                '/totoro.RAGCoreService/PreQuestion',
+                request_serializer=totoro_dot_pb_dot_services__pb2.PreQuestionRequest.SerializeToString,
+                response_deserializer=totoro_dot_pb_dot_services__pb2.PreQuestionResponse.FromString,
                 )
 
 
 class RAGCoreServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def embedding(self, request, context):
+    def EmbeddingDoc(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def reanking(self, request, context):
+    def ReankingDoc(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def query(self, request, context):
+    def BuildQuery(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def embedding_progress(self, request, context):
+    def ReadEmbeddingProgress(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PreQuestion(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -67,25 +78,30 @@ class RAGCoreServiceServicer(object):
 
 def add_RAGCoreServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'embedding': grpc.unary_unary_rpc_method_handler(
-                    servicer.embedding,
+            'EmbeddingDoc': grpc.unary_unary_rpc_method_handler(
+                    servicer.EmbeddingDoc,
                     request_deserializer=totoro_dot_pb_dot_services__pb2.EmbeddingRequest.FromString,
                     response_serializer=totoro_dot_pb_dot_services__pb2.EmbeddingResponse.SerializeToString,
             ),
-            'reanking': grpc.unary_unary_rpc_method_handler(
-                    servicer.reanking,
+            'ReankingDoc': grpc.unary_unary_rpc_method_handler(
+                    servicer.ReankingDoc,
                     request_deserializer=totoro_dot_pb_dot_services__pb2.ReankingRequest.FromString,
                     response_serializer=totoro_dot_pb_dot_services__pb2.ReankingResponse.SerializeToString,
             ),
-            'query': grpc.unary_unary_rpc_method_handler(
-                    servicer.query,
+            'BuildQuery': grpc.unary_unary_rpc_method_handler(
+                    servicer.BuildQuery,
                     request_deserializer=totoro_dot_pb_dot_services__pb2.QueryBuildRequest.FromString,
                     response_serializer=totoro_dot_pb_dot_services__pb2.QueryBuildResponse.SerializeToString,
             ),
-            'embedding_progress': grpc.unary_unary_rpc_method_handler(
-                    servicer.embedding_progress,
+            'ReadEmbeddingProgress': grpc.unary_unary_rpc_method_handler(
+                    servicer.ReadEmbeddingProgress,
                     request_deserializer=totoro_dot_pb_dot_services__pb2.EmbeddingProgressRequest.FromString,
                     response_serializer=totoro_dot_pb_dot_doc__pb2.DocDegreeProgress.SerializeToString,
+            ),
+            'PreQuestion': grpc.unary_unary_rpc_method_handler(
+                    servicer.PreQuestion,
+                    request_deserializer=totoro_dot_pb_dot_services__pb2.PreQuestionRequest.FromString,
+                    response_serializer=totoro_dot_pb_dot_services__pb2.PreQuestionResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -98,7 +114,7 @@ class RAGCoreService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def embedding(request,
+    def EmbeddingDoc(request,
             target,
             options=(),
             channel_credentials=None,
@@ -108,14 +124,14 @@ class RAGCoreService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/embedding',
+        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/EmbeddingDoc',
             totoro_dot_pb_dot_services__pb2.EmbeddingRequest.SerializeToString,
             totoro_dot_pb_dot_services__pb2.EmbeddingResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def reanking(request,
+    def ReankingDoc(request,
             target,
             options=(),
             channel_credentials=None,
@@ -125,14 +141,14 @@ class RAGCoreService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/reanking',
+        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/ReankingDoc',
             totoro_dot_pb_dot_services__pb2.ReankingRequest.SerializeToString,
             totoro_dot_pb_dot_services__pb2.ReankingResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def query(request,
+    def BuildQuery(request,
             target,
             options=(),
             channel_credentials=None,
@@ -142,14 +158,14 @@ class RAGCoreService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/query',
+        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/BuildQuery',
             totoro_dot_pb_dot_services__pb2.QueryBuildRequest.SerializeToString,
             totoro_dot_pb_dot_services__pb2.QueryBuildResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def embedding_progress(request,
+    def ReadEmbeddingProgress(request,
             target,
             options=(),
             channel_credentials=None,
@@ -159,8 +175,25 @@ class RAGCoreService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/embedding_progress',
+        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/ReadEmbeddingProgress',
             totoro_dot_pb_dot_services__pb2.EmbeddingProgressRequest.SerializeToString,
             totoro_dot_pb_dot_doc__pb2.DocDegreeProgress.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def PreQuestion(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/totoro.RAGCoreService/PreQuestion',
+            totoro_dot_pb_dot_services__pb2.PreQuestionRequest.SerializeToString,
+            totoro_dot_pb_dot_services__pb2.PreQuestionResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

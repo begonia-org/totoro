@@ -12,6 +12,7 @@ from typing import IO
 from urllib.parse import urlparse
 import httpx
 from totoro.biz.core import RAGCore
+from totoro.biz.nlp import NLPHub
 from totoro.infra.rdb import RDB
 from totoro.pb import services_pb2, services_pb2_grpc, doc_pb2
 from totoro.models.constant_model import ChunkType
@@ -23,8 +24,9 @@ from totoro.utils.utils import is_url
 class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
     def __init__(self, rdb: RDB):
         self.__core = RAGCore(rdb)
+        self.__nlp = NLPHub()
 
-    def embedding(self, request: services_pb2.EmbeddingRequest, context) -> services_pb2.EmbeddingResponse:
+    def EmbeddingDoc(self, request: services_pb2.EmbeddingRequest, context) -> services_pb2.EmbeddingResponse:
         if not request.embedding or request.embedding.find("/") == -1:
             raise ValueError("No embedding model or invalid embedding model")
         if not request.chunk_type:
@@ -44,10 +46,11 @@ class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
             items: doc_pb2.EmbededItem = []
             for doc, tk in ret:
                 doc.file_key = request.file_key_or_url
-                items.append(doc_pb2.EmbededItem(doc=doc.to_protobuf(), tokens=tk))
+                items.append(doc_pb2.EmbededItem(
+                    doc=doc.to_protobuf(), tokens=tk))
             return services_pb2.EmbeddingResponse(items=items)
 
-    def reanking(self, request: services_pb2.ReankingRequest, context):
+    def ReankingDoc(self, request: services_pb2.ReankingRequest, context):
         factory = request.rerank.split("/")[0]
         return self.__core.reranking(request.query, request.candidates,
                                      RerankModel[factory](
@@ -55,14 +58,17 @@ class RAGService(services_pb2_grpc.RAGCoreServiceServicer):
                                      request.keyword_simlarity_weight,
                                      request.semantic_simlarity_weight)
 
-    def embedding_progress(self, request: services_pb2.EmbeddingProgressRequest, context) -> doc_pb2.DocDegreeProgress:
+    def ReadEmbeddingProgress(self, request: services_pb2.EmbeddingProgressRequest, context) -> doc_pb2.DocDegreeProgress:
         return self.__core.get_prog(request.task_id).to_protobuf()
 
-    def query(self, request: services_pb2.QueryBuildRequest, context) -> services_pb2.QueryBuildResponse:
+    def BuildQuery(self, request: services_pb2.QueryBuildRequest, context) -> services_pb2.QueryBuildResponse:
         factory = request.embedding.split("/")[0]
         return self.__core.build_query_vector(request.query,
                                               EmbeddingModel[factory](request.model_api_key,
                                                                       request.embedding))
+
+    def PreQuestion(self, request: services_pb2.PreQuestionRequest, context) -> services_pb2.PreQuestionResponse:
+        return self.__nlp.pre_question(request.question)
 
     def __get_file(self, tmp: IO, file_key_or_url: str):
         if is_url(file_key_or_url):

@@ -8,17 +8,17 @@
 '''
 
 
-from pydantic import BaseModel
-
-from typing import List, Optional, Type
-
-from pydantic import Field as _Field
+from typing import List, Type, Optional
 
 from pydantic_protobuf.ext import model2protobuf, pool, PydanticModel, protobuf2model
 
-from google.protobuf import message_factory
+from pydantic import Field as _Field
+
+from pydantic import BaseModel
 
 from google.protobuf import message as _message
+
+from google.protobuf import message_factory
 
 
 class Http(BaseModel):
